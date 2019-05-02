@@ -40,9 +40,9 @@ function update_chart(data) {
     for(let i=0; i<data.length; i++) {
         if(data[i].realtime) nb_of_realtime_points++;
         if(data[i].predicted) nb_of_predicted_points++;
-
-        // TODO ajouter un point fictif pour lier les deux courbes
-
+        if(nb_of_realtime_points > 0 && nb_of_predicted_points == 1) {
+            data.splice(i-1, 0, {date: data[i-1].date, predicted: data[i-1].realtime});
+        }
     }
     
     am4core.ready(function() {
