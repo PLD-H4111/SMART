@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `mydb`.`Event` (
+CREATE TABLE IF NOT EXISTS `main`.`Event` (
   `PK_idEvent` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `beginningDate` DATE NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Event` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`SensorType` (
+CREATE TABLE IF NOT EXISTS `main`.`SensorType` (
   `PK_idSensorType` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(45) NOT NULL,
   `unit` VARCHAR(10) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`SensorType` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Restaurant` (
+CREATE TABLE IF NOT EXISTS `main`.`Restaurant` (
   `PK_idRestaurant` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `theme` VARCHAR(45) NULL,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Restaurant` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Sensor` (
+CREATE TABLE IF NOT EXISTS `main`.`Sensor` (
   `PK_idSensor` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `position` INT UNSIGNED NOT NULL,
   `FK_restaurant` INT UNSIGNED NOT NULL,
@@ -33,18 +33,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Sensor` (
   INDEX `FK_sensorType_idx` (`FK_sensorType` ASC),
   CONSTRAINT `FK_restaurant`
     FOREIGN KEY (`FK_restaurant`)
-    REFERENCES `mydb`.`Restaurant` (`PK_idRestaurant`)
+    REFERENCES `main`.`Restaurant` (`PK_idRestaurant`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `FK_sensorType`
     FOREIGN KEY (`FK_sensorType`)
-    REFERENCES `mydb`.`SensorType` (`PK_idSensorType`)
+    REFERENCES `main`.`SensorType` (`PK_idSensorType`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Measure` (
+CREATE TABLE IF NOT EXISTS `main`.`Measure` (
   `PK_idMeasure` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `dateTime` DATETIME NOT NULL,
   `measure` DECIMAL(10) NOT NULL,
@@ -53,13 +53,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Measure` (
   INDEX `FK_sensor_idx` (`FK_sensor` ASC),
   CONSTRAINT `FK_sensor`
     FOREIGN KEY (`FK_sensor`)
-    REFERENCES `mydb`.`Sensor` (`PK_idSensor`)
+    REFERENCES `main`.`Sensor` (`PK_idSensor`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`WaitingTime` (
+CREATE TABLE IF NOT EXISTS `main`.`WaitingTime` (
   `PK_idWaitingTime` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `waitingTime` INT UNSIGNED NOT NULL,
   `date` DATETIME NOT NULL,
@@ -68,13 +68,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`WaitingTime` (
   INDEX `FK_restaurant_idx` (`FK_restaurant` ASC),
   CONSTRAINT `FK_restaurant`
     FOREIGN KEY (`FK_restaurant`)
-    REFERENCES `mydb`.`Restaurant` (`PK_idRestaurant`)
+    REFERENCES `main`.`Restaurant` (`PK_idRestaurant`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`RestaurantAvailabilities` (
+CREATE TABLE IF NOT EXISTS `main`.`RestaurantAvailabilities` (
   `PK_idRestaurantAvailabilities` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `date` DATETIME NOT NULL,
   `openingTime` DATETIME NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`RestaurantAvailabilities` (
   INDEX `fk_Restaurant_idx` (`FK_restaurant` ASC),
   CONSTRAINT `fk_Restaurant`
     FOREIGN KEY (`FK_restaurant`)
-    REFERENCES `mydb`.`Restaurant` (`PK_idRestaurant`)
+    REFERENCES `main`.`Restaurant` (`PK_idRestaurant`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
