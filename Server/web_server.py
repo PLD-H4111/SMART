@@ -142,7 +142,6 @@ def run(server_class=HTTPServer, handler_class=HTTPHandler, host=HOST_NAME, port
 
 
 if __name__ == "__main__":
-
 	if len(argv) == 2:
 		run(port=int(argv[1]))
 	else:
