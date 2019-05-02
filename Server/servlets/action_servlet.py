@@ -5,7 +5,7 @@
 import json
 
 import service1
-
+import service2
 
 
 def fetch(input_data):
@@ -14,11 +14,12 @@ def fetch(input_data):
 		# pas la bonne structure de l'input data
 		pass
 
-	if input_data["action"][0] == "get-restaurants-list":
-		print("action servlet:", input_data["action"][0])
+	print("action servlet:", input_data["action"][0])
+	
+	if input_data["action"][0] == "get-restaurants-list":	
 		return service1.get_restaurants()
-	elif input_data["action"][0] == "other":
-		pass
+	elif input_data["action"][0] == "get-restaurants-details":
+		return service2.get_restaurant_details(restaurant_id)
 	else:
 		pass
 	
