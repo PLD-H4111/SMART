@@ -6,6 +6,11 @@ class sgbd:
 		self.cursor = self.connexion.cursor()
 	def execute_script(self, script):
 		self.cursor.executescript(script)
+	def execute_script_from_file(self, filename):
+		my_file = open(filename, "r")
+		content = my_file.read()
+		my_file.close()
+		self.execute_script(content)
 	def execution(self, request, data):
 		self.cursor.execute(request, data)
 		return self.cursor.fetchall()
@@ -28,20 +33,7 @@ class sgbd:
 
 #Code Exemple
 a = sgbd("basededonnees.db")
-a.execute_script("""
-
-	DROP TABLE IF EXISTS scores;
-
-	CREATE TABLE IF NOT EXISTS scores(
-	id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-	pseudo TEXT,
-	valeur INTEGER);
-	
-	INSERT INTO scores(pseudo, valeur) VALUES ("toto", 1000);
-	INSERT INTO scores(pseudo, valeur) VALUES ("tata", 750);
-	INSERT INTO scores(pseudo, valeur) VALUES ("titi", 500);
-	INSERT INTO scores(pseudo, valeur) VALUES ("titi", 233);
-""")
+a.execute_script_from_file("script_test.sql")
 a.commit()
 donnee = ("titi", )
 results = a.execution("SELECT valeur FROM scores WHERE pseudo = ?", donnee)
