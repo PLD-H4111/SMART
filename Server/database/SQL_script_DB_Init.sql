@@ -7,18 +7,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Event` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Measure` (
-  `PK_idMeasure` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `dateTime` DATETIME NOT NULL,
-  `measure` DECIMAL(10) NOT NULL,
-  `FK_sensor` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`PK_idMeasure`),
-  INDEX `FK_sensor_idx` (`FK_sensor` ASC),
-  CONSTRAINT `FK_sensor`
-    FOREIGN KEY (`FK_sensor`)
-    REFERENCES `mydb`.`Sensor` (`PK_idSensor`)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE)
+CREATE TABLE IF NOT EXISTS `mydb`.`SensorType` (
+  `PK_idSensorType` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(45) NOT NULL,
+  `unit` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`PK_idSensorType`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
@@ -51,11 +44,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Sensor` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
-CREATE TABLE IF NOT EXISTS `mydb`.`SensorType` (
-  `PK_idSensorType` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(45) NOT NULL,
-  `unit` VARCHAR(10) NOT NULL,
-  PRIMARY KEY (`PK_idSensorType`))
+CREATE TABLE IF NOT EXISTS `mydb`.`Measure` (
+  `PK_idMeasure` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `dateTime` DATETIME NOT NULL,
+  `measure` DECIMAL(10) NOT NULL,
+  `FK_sensor` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`PK_idMeasure`),
+  INDEX `FK_sensor_idx` (`FK_sensor` ASC),
+  CONSTRAINT `FK_sensor`
+    FOREIGN KEY (`FK_sensor`)
+    REFERENCES `mydb`.`Sensor` (`PK_idSensor`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 
