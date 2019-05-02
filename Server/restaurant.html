@@ -1,161 +1,68 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <title>Oblivion</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="scripts/restaurant.script.js"></script>
 </head>
+
 <body>
+    <div class="jumbotron text-center">
+        <h1 id="restaurant-name"></h1>
+        <p id="restaurant-theme"></p>
+    </div>
 
-<div class="jumbotron text-center">
-    <h1 id="restaurant-name"></h1>
-    <p id="restaurant-theme"></p>
-</div>
-
-
-<div class="container">
-    <h2>Etat de la file d'attente</h2>
-    <div class="row">
-        <div class="col-lg-8">
- 
-<!-- Styles -->
-<style>
-#chartdiv {
-  width: 100%;
-  height: 500px;
-}
-
-</style>
-
-<!-- Resources -->
-<script src="https://www.amcharts.com/lib/4/core.js"></script>
-<script src="https://www.amcharts.com/lib/4/charts.js"></script>
-<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
-
-<!-- Chart code -->
-<script>
-am4core.ready(function() {
-
-// Themes begin
-am4core.useTheme(am4themes_animated);
-// Themes end
-
-// Create chart instance
-var chart = am4core.create("chartdiv", am4charts.XYChart);
-
-// Add data
-var data = [];
-var realtime = 0;
-var predicted = 0;
-for(let i = 0; i < 300; i++){
-  let date = new Date();
-  date.setHours(0,0,0,0);
-  date.setDate(i);
-  realtime += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-  predicted += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-  data.push({date:date, realtime: realtime, predicted: predicted});
-}
-chart.data = data;
-
-
-// Create date axis
-var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-dateAxis.renderer.minGridDistance = 60;
-
-// Create value axis
-var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "Temps d'attente";
-valueAxis.renderer.minLabelPosition = 0.01;
-
-// Create series
-var series1 = chart.series.push(new am4charts.LineSeries());
-series1.dataFields.valueY = "realtime";
-series1.dataFields.dateX = "date";
-series1.name = "Attente réelle";
-series1.strokeWidth = 1;
-let bullet = series1.bullets.push(new am4charts.Bullet());
-let square = bullet.createChild(am4core.Rectangle);
-square.width = 3;
-square.height = 3;
-square.horizontalCenter = "middle";
-square.verticalCenter = "middle";
-series1.tooltipText = "Attente actuelle : {valueY}";
-series1.legendSettings.valueText = "{valueY}";
-series1.visible  = false;
-
-var series2 = chart.series.push(new am4charts.LineSeries());
-series2.dataFields.valueY = "predicted";
-series2.dataFields.dateX = "date";
-series2.name = "Attente estimée";
-series2.strokeWidth = 1;
-let bullet2 = series2.bullets.push(new am4charts.Bullet());
-let square2= bullet2.createChild(am4core.Rectangle);
-square2.width = 3;
-square2.height = 3;
-square2.horizontalCenter = "middle";
-square2.verticalCenter = "middle";
-series2.tooltipText = "Attente estimée : {valueY}";
-series2.legendSettings.valueText = "{valueY}";
-series2.visible  = false;
-
-// Add chart cursor
-chart.cursor = new am4charts.XYCursor();
-chart.cursor.behavior = "zoomY";
-
-// Add legend
-chart.legend = new am4charts.Legend();
-
-}); // end am4core.ready()
-</script>
-
-<!-- HTML -->
-<div id="chartdiv"></div>
-
-
-
-
-
-
-
-        </div>
-        <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">Informations</div>
-                <div class="panel-body">
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td>Horaires</td>
-                            <td id="restaurant-schedule">X</td>
-                        </tr>
-                        <tr>
-                            <td>Etat</td>
-                            <td id="restaurant-status">X</td>
-                        </tr>
-                        <tr>
-                            <td>Débit</td>
-                            <td id="restaurant-throughput">X</td>
-                        </tr>
-                        <tr>
-                            <td>Temps d'attente courant</td>
-                            <td id="restaurant-current-waiting-time">X</td>
-                        </tr>
-                        <tr>
-                            <td>Temps d'attente curseur</td>
-                            <td id="restaurant-cursor-waiting-time">X</td>
-                        </tr>
-                        </tbody>
-                    </table>
+    <div class="container">
+        <h2>Etat de la file d'attente</h2>
+        <div class="row">
+            <div class="col-lg-8">
+                <style>
+                
+                </style>
+                <div id="chartdiv"></div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Informations</div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Horaires</td>
+                                <td id="restaurant-schedule">X</td>
+                            </tr>
+                            <tr>
+                                <td>Etat</td>
+                                <td id="restaurant-status">X</td>
+                            </tr>
+                            <tr>
+                                <td>Débit courant</td>
+                                <td id="restaurant-throughput">X</td>
+                            </tr>
+                            <tr>
+                                <td>Temps d'attente courant</td>
+                                <td id="restaurant-current-waiting-time">X</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                <input type="date" class="form-control" id="date-picker" onchange="calendar_handler(event);">
             </div>
         </div>
     </div>
-</div>
-
 </body>
+
 </html>
 
