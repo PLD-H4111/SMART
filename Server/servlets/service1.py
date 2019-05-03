@@ -2,7 +2,14 @@
 # -*- coding: utf-8 -*-
 
 
+from importlib import reload
+import sys
+sys.path.insert(0, '../database/')
+reload(sys)
+import bdr
+
 import json
+
 
 
 
@@ -23,3 +30,15 @@ def get_restaurants():
 	
 	
 
+def test():
+	#Code Exemple
+	a = bdr.sgbd("../database/mydb.db") # metis
+	a.execute_script_from_file("../database/SQL_script_DB_Init.sql") # SQL_script_DB_Init
+	a.commit()
+	donnee = ("titi", )
+	results = a.execution("PRAGMA database_list;") #"SELECT * FROM Restaurant")
+	results = a.execution("attach database 'example.db' as another_db;")
+	a.print_all_results(results)
+	a.exit()
+
+test()

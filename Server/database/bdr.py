@@ -11,8 +11,11 @@ class sgbd:
 		content = my_file.read()
 		my_file.close()
 		self.execute_script(content)
-	def execution(self, request, data):
-		self.cursor.execute(request, data)
+	def execution(self, request, data=None):
+		if data == None:
+			self.cursor.execute(request)
+		else:
+			self.cursor.execute(request, data)
 		return self.cursor.fetchall()
 	def execution_print(self, request, data):
 		self.cursor.execute(request, data)
@@ -31,6 +34,9 @@ class sgbd:
 
 
 
+		
+"""
+
 #Code Exemple
 a = sgbd("basededonnees.db")
 a.execute_script_from_file("script_test.sql")
@@ -39,3 +45,6 @@ donnee = ("titi", )
 results = a.execution("SELECT valeur FROM scores WHERE pseudo = ?", donnee)
 a.print_all_results(results)
 a.exit()
+
+
+"""

@@ -34,11 +34,13 @@ PORT_NUMBER		  = 80
 
 
 class HTTPHandler(BaseHTTPRequestHandler):
-	''' For more information on CORS see:
-		* https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
-		* http://enable-cors.org/
-	'''
-	# session manager
+	"""HTTPHandler
+	
+	This class is an handler for a HTTPServer, it handles GET requests
+	
+	Attributes:
+		sessions: blabla
+	"""
 	sessions = {}
 
 
