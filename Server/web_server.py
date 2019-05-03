@@ -12,7 +12,6 @@ import base64
 import os					# curdir, sep
 
 import socketserver
-import simplejson
 import json
 import time
 import cgi

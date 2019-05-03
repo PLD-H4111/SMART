@@ -22,7 +22,7 @@ function update_page(date) {
             update_chart(data.data);
         }
     });
-   // update_chart(create_random_data());
+    // update_chart(create_random_data());
 }
 
 function update_infos(data) {
@@ -37,27 +37,41 @@ function update_infos(data) {
 function update_chart(data) {
     let nb_of_realtime_points = 0;
     let nb_of_predicted_points = 0;
+    formatted_data = [];
     
     for(let i=0; i<data.length; i++) {
-        if(data[i].realtime) nb_of_realtime_points++;
-        if(data[i].predicted) nb_of_predicted_points++;
-        if(nb_of_realtime_points > 0 && nb_of_predicted_points == 1) {
-            data.splice(i-1, 0, {date: data[i-1].date, predicted: data[i-1].realtime});
+        let hh = parseInt(data[i].date.substr(0, 2), 10);
+        let mm = parseInt(data[i].date.substr(3, 2), 10);
+        let ss = parseInt(data[i].date.substr(6, 2), 10);
+        let time = new Date($("#date-picker").val());
+        time.setHours(hh, mm, ss);
+        
+        if(typeof data[i].realtime !== 'undefined') {
+            nb_of_realtime_points++;
+            formatted_data.push({date: time, realtime: data[i].realtime});
         }
-        data[i].date = new Date(2019, 05, 05, parseInt(data[i].date.substr(0, 2), 10), parseInt(data[i].date.substr(3, 2), 10), parseInt(data[i].date.substr(6, 2), 10));
-        alert(data[i].date)
+        if(typeof data[i].predicted !== 'undefined') {
+            nb_of_predicted_points++;
+            if(nb_of_realtime_points > 0 && nb_of_predicted_points === 1) {
+                formatted_data.push({date: formatted_data[i-1].date, predicted: formatted_data[i-1].realtime});
+            }
+            formatted_data.push({date: time, predicted: data[i].predicted});
+        }
     }
     
     am4core.ready(function() {
         am4core.useTheme(am4themes_animated);
         let chart = am4core.create("chartdiv", am4charts.XYChart);
-        chart.data = data;
+        chart.data = formatted_data;
         chart.dateFormatter.dateFormat = "HH:mm:ss";
 
         let date_axis = chart.xAxes.push(new am4charts.DateAxis());
-        date_axis.renderer.minGridDistance = 50;
+        date_axis.renderer.minGridDistance = 60;
         date_axis.dateFormatter.dateFormat = "HH:mm:ss";
-       
+        date_axis.baseInterval = {   
+            "timeUnit": "second",
+            "count": 10
+        };
 
         let value_axis = chart.yAxes.push(new am4charts.ValueAxis());
         value_axis.title.text = "Temps d'attente";
@@ -118,20 +132,16 @@ function create_random_data() {
     let data = [];
     let realtime = 0;
     let predicted = 0;
-    for(let i = 0; i < 180; i++) {
-        /*let date = new Date();
-        date.setHours(0,0,i,0);
-        date.setDate(0);*/
-        realtime += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-        data.push({date: new Date(2018, 3, 20, 1, 0, 30*i), realtime: realtime});
+    for(let i=10; i<60; i+=1) {
+        for(let j=10; j<60; j+=30) {
+            realtime += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
+            data.push({date: "12:" + i + ":" + j, realtime: realtime});
+        }
     }
- /*   for(let i = 0; i < 60; i++) {
-        /*let date = new Date();
-        date.setHours(0,0,i,0);
-        date.setDate(0);*/
-        /*predicted += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-        data.push({date: new Date(2018, 3, 20, 2, 1, i*30), predicted: predicted});
-    } */
+    for(let i=10; i<60; i+=5) {
+        predicted += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
+        data.push({date: "13:" + i + ":00", predicted: predicted});
+    }
     return data;
 }
 
