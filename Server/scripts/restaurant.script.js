@@ -9,19 +9,20 @@ $(document).ready(function() {
 
 function update_page(date) {
     let restaurant = window.location.href.substr(window.location.href.indexOf('=') + 1)
-    /*$.ajax({
-        url: "action_servlet",
+    $.ajax({
+        url: "/action_servlet",
         data: {
             "action": "get-restaurant-details",
             "id": restaurant,
             "date": date
         },
+        dataType: "json",
         success: function(data) {
             update_infos(data);
             update_chart(data.data);
         }
-    });*/
-    update_chart(create_random_data());
+    });
+   // update_chart(create_random_data());
 }
 
 function update_infos(data) {
@@ -43,15 +44,20 @@ function update_chart(data) {
         if(nb_of_realtime_points > 0 && nb_of_predicted_points == 1) {
             data.splice(i-1, 0, {date: data[i-1].date, predicted: data[i-1].realtime});
         }
+        data[i].date = new Date(2019, 05, 05, parseInt(data[i].date.substr(0, 2), 10), parseInt(data[i].date.substr(3, 2), 10), parseInt(data[i].date.substr(6, 2), 10));
+        alert(data[i].date)
     }
     
     am4core.ready(function() {
         am4core.useTheme(am4themes_animated);
         let chart = am4core.create("chartdiv", am4charts.XYChart);
         chart.data = data;
+        chart.dateFormatter.dateFormat = "HH:mm:ss";
 
         let date_axis = chart.xAxes.push(new am4charts.DateAxis());
-        date_axis.renderer.minGridDistance = 60;
+        date_axis.renderer.minGridDistance = 50;
+        date_axis.dateFormatter.dateFormat = "HH:mm:ss";
+       
 
         let value_axis = chart.yAxes.push(new am4charts.ValueAxis());
         value_axis.title.text = "Temps d'attente";
@@ -112,20 +118,20 @@ function create_random_data() {
     let data = [];
     let realtime = 0;
     let predicted = 0;
-    for(let i = 0; i < 100; i++) {
-        let date = new Date();
+    for(let i = 0; i < 180; i++) {
+        /*let date = new Date();
         date.setHours(0,0,i,0);
-        date.setDate(0);
+        date.setDate(0);*/
         realtime += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-        data.push({date:date, realtime: realtime});
+        data.push({date: new Date(2018, 3, 20, 1, 0, 30*i), realtime: realtime});
     }
-    for(let i = 100; i < 200; i++) {
-        let date = new Date();
+ /*   for(let i = 0; i < 60; i++) {
+        /*let date = new Date();
         date.setHours(0,0,i,0);
-        date.setDate(0);
-        predicted += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-        data.push({date:date, predicted: predicted});
-    }
+        date.setDate(0);*/
+        /*predicted += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
+        data.push({date: new Date(2018, 3, 20, 2, 1, i*30), predicted: predicted});
+    } */
     return data;
 }
 

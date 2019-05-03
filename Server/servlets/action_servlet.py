@@ -18,8 +18,8 @@ def fetch(input_data):
 	
 	if input_data["action"][0] == "get-restaurants-list":	
 		return service1.get_restaurants()
-	elif input_data["action"][0] == "get-restaurants-details":
-		return service2.get_restaurant_details(restaurant_id)
+	elif input_data["action"][0] == "get-restaurant-details":
+		return service2.get_restaurant_details(input_data["id"][0], input_data["date"][0])
 	else:
 		pass
 	
