@@ -10,7 +10,6 @@ import service2
 
 
 
-
 class ActionServlet:
     def __init__(self):
         self.mydb = mysql.connector.connect(
@@ -27,11 +26,12 @@ class ActionServlet:
             pass
 
         print("action servlet:", input_data["action"][0])
+        print(input_data)
         
         if input_data["action"][0] == "get-restaurants-list":    
             return service1.get_restaurants(self.mydb)
         elif input_data["action"][0] == "get-restaurant-details":
-            return service2.get_restaurant_details(self.mydb, input_data["id"][0], input_data["date"][0])
+            return service2.get_restaurants_details(self.mydb, input_data["restaurants[]"][0], input_data["date"][0])
         else:
             pass
 
