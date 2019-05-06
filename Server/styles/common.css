@@ -11,6 +11,11 @@ input[type="checkbox"] {
     margin-right: 8px;
 }
 
+#date-picker {
+    margin-bottom: 20px;
+}
+
+
 .status_open {
     color: green;
 }
