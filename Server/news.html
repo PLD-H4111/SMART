@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <title>Oblivion</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="stylesheet" href="styles/news.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="scripts/common.js"></script>
+    <script src="scripts/news.js"></script>
+</head>
+
+<body>
+    <div class="jumbotron text-center">
+        <h1>Oblivion</h1>
+        <p>Administration</p>
+    </div>
+
+    <div class="container">
+        <div id="feedback"></div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>Titre de la nouvelle</h3>
+                        <input type="text" class="form-control" id="title"/>
+                    </div>
+                    <div class="col-sm-12">
+                        <h3>Description de la nouvelle</h3>
+                        <textarea class="md-textarea form-control" id="content" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>Date de début</h3>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>Date de fin</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <input type="date" class="form-control" id="start-date-picker"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="date" class="form-control" id="end-date-picker"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Restaurants impliqués</h3>         
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sélectionez les restaurants concernés par la nouvelle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="restaurants-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" id="create-button" onclick="create()">Créer la nouvelle</button>
+        <button class="btn btn-primary" id="logout-button" onclick="redirect('admin.html')">Annuler</button>
+    </div>
+</body>
+</html>
+

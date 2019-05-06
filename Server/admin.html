@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <title>Oblivion</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/common.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="scripts/common.js"></script>
+    <script src="scripts/admin.js"></script>
+</head>
+
+<body>
+    <div class="jumbotron text-center">
+        <h1>Oblivion</h1>
+        <p>Administration</p>
+    </div>
+
+    <div class="container">
+        <div class="container login-container">
+            <h1>Liste des nouvelles</h1>
+            <table class="table">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                </tr>
+            </thead>
+            <tbody id="restaurants-list"></tbody>
+            </table>
+            <button class="btn btn-primary" id="create-button" onclick="redirect('news.html')">Créer une nouvelle</button>
+            <button class="btn btn-primary" id="logout-button" onclick="logout()">Déconnexion</button>
+        </div>
+    </div>
+</body>
+</html>
+

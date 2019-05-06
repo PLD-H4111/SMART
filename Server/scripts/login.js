@@ -5,10 +5,11 @@ function login() {
     $.ajax({
         url: "/action_servlet",
         data: {
-            action: "admin-login",
-            login: login,
-            password: password
+            "action": "admin-login",
+            "login": login,
+            "password": password
         },
+        dataType: "json",
         success: function(data) {
             if(data.success == 1) {
                 window.location.href = "admin.html";

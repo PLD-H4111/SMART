@@ -29,3 +29,12 @@ input[type="checkbox"] {
     margin-right: auto;
     margin-left: auto;
 }
+
+.form-control {
+    margin-bottom: 10px;
+}
+
+button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
