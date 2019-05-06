@@ -1,6 +1,12 @@
 var restaurant_checkboxes = [];
 
 $(document).ready(function() {
+    Notification.requestPermission(function(status) {
+        if(Notification.permission !== status) {
+            Notification.permission = status;
+        }
+    });
+    
     restaurant_checkboxes = [];
     $.ajax({
         url: "action_servlet",

@@ -1,0 +1,10 @@
+{
+    "short_name": "Oblivion",
+    "name": "Oblivion",
+    "permissions": {
+        "desktop-notification": {
+            "description": "Needed for creating system notifications."
+        }
+    }
+}
+
