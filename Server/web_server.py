@@ -55,7 +55,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 		# set the cookies
 		#self.send_header('Cookie', self.cookieHeader)
 		#self.send_header('Set-Cookie', list(self.cookies.values())[i].output(header=''))
-		self.send_header('Set-Cookie', self.cookies.output(header=''))
+		###self.send_header('Set-Cookie', self.cookies.output(header=''))
 		self.end_headers()
 
 
@@ -125,6 +125,18 @@ class HTTPHandler(BaseHTTPRequestHandler):
 				return
 			except IOError:
 				self.send_error(404,'File Not Found: %s' % self.path)
+				
+	def do_POST(self):
+		""" method: POST """
+		input_data			= self.rfile.read( int(self.headers['Content-Length']) )		
+		input_data			= input_data.decode()
+		
+		print(input_data)
+		
+		encoded_response	= bytes( "bravo", 'utf-8' )
+		
+		self._set_headers()
+		self.wfile.write(encoded_response)
 
 
 
