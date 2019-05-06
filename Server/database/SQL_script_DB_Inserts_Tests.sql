@@ -44,8 +44,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `main`;
-INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`) VALUES (DEFAULT, 'rentrÃ©e scolaire', '2019-05-05', '2019-05-05');
-INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`) VALUES (DEFAULT, 'veille de vacances', '2019-09-21', '2019-09-21');
+INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, `FK_restaurant`) VALUES (DEFAULT, 'rentrée scolaire', '2019-05-05', '2019-05-05', NULL);
+INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, `FK_restaurant`) VALUES (DEFAULT, 'veille de vacances', '2019-09-21', '2019-09-21', NULL);
 
 COMMIT;
 
@@ -59,4 +59,3 @@ INSERT INTO `main`.`RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, 
 INSERT INTO `main`.`RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, `date`, `openingTime`, `closingTime`, `FK_restaurant`) VALUES (DEFAULT, '2019-05-02', '11:30:00', '13:30:00', 1);
 
 COMMIT;
-
