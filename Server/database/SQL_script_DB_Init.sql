@@ -23,8 +23,15 @@ USE `main` ;
 CREATE TABLE IF NOT EXISTS `main`.`Restaurant` (
   `PK_idRestaurant` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
+<<<<<<< Updated upstream
   `theme` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`PK_idRestaurant`))
+=======
+  `beginningDate` DATE NOT NULL,
+  `endingDate` DATE NOT NULL,
+  PRIMARY KEY (`PK_idEvent`))
+ENGINE = InnoDB
+>>>>>>> Stashed changes
 AUTO_INCREMENT = 1;
 
 
@@ -35,8 +42,22 @@ CREATE TABLE IF NOT EXISTS `main`.`SensorType` (
   `PK_idSensorType` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` VARCHAR(45) NOT NULL,
   `unit` VARCHAR(10) NOT NULL,
+<<<<<<< Updated upstream
   PRIMARY KEY (`PK_idSensorType`));
 
+=======
+  PRIMARY KEY (`PK_idSensorType`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 1;
+
+CREATE TABLE IF NOT EXISTS `main`.`Restaurant` (
+  `PK_idRestaurant` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `theme` VARCHAR(45) NULL,
+  PRIMARY KEY (`PK_idRestaurant`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 1;
+>>>>>>> Stashed changes
 
 -- -----------------------------------------------------
 -- Table `main`.`Sensor`
@@ -57,9 +78,14 @@ CREATE TABLE IF NOT EXISTS `main`.`Sensor` (
     REFERENCES `main`.`SensorType` (`PK_idSensorType`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
+<<<<<<< Updated upstream
 AUTO_INCREMENT = 1;
 
 CREATE INDEX `FK_sensorRestaurant_idx` ON `main`.`Sensor` (`FK_restaurant` ASC);
+=======
+ENGINE = InnoDB
+AUTO_INCREMENT = 1;
+>>>>>>> Stashed changes
 
 CREATE INDEX `FK_sensorType_idx` ON `main`.`Sensor` (`FK_sensorType` ASC);
 
@@ -78,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `main`.`Measure` (
     REFERENCES `main`.`Sensor` (`PK_idSensor`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
+<<<<<<< Updated upstream
 AUTO_INCREMENT = 1;
 
 CREATE INDEX `fk_Sensor_idx` ON `main`.`Measure` (`FK_sensor` ASC);
@@ -94,6 +121,10 @@ CREATE TABLE IF NOT EXISTS `main`.`Event` (
   PRIMARY KEY (`PK_idEvent`))
 AUTO_INCREMENT = 1;
 
+=======
+ENGINE = InnoDB
+AUTO_INCREMENT = 1;
+>>>>>>> Stashed changes
 
 -- -----------------------------------------------------
 -- Table `main`.`WaitingTime`
@@ -104,31 +135,51 @@ CREATE TABLE IF NOT EXISTS `main`.`WaitingTime` (
   `date` DATETIME NOT NULL,
   `FK_restaurant` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`PK_idWaitingTime`),
+<<<<<<< Updated upstream
   CONSTRAINT `FK_restaurant_waitingTime`
+=======
+  INDEX `FK_restaurant_idx` (`FK_restaurant` ASC),
+  CONSTRAINT `FK_restaurant1`
+>>>>>>> Stashed changes
     FOREIGN KEY (`FK_restaurant`)
     REFERENCES `main`.`Restaurant` (`PK_idRestaurant`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
+<<<<<<< Updated upstream
 AUTO_INCREMENT = 1;
 
 CREATE INDEX `FK_restaurant_idx` ON `main`.`WaitingTime` (`FK_restaurant` ASC);
 
+=======
+ENGINE = InnoDB
+AUTO_INCREMENT = 1;
+>>>>>>> Stashed changes
 
 -- -----------------------------------------------------
 -- Table `main`.`RestaurantAvailabilities`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `main`.`RestaurantAvailabilities` (
   `PK_idRestaurantAvailabilities` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+<<<<<<< Updated upstream
   `date` DATE NOT NULL,
+=======
+  `date` DATETIME NOT NULL,
+>>>>>>> Stashed changes
   `openingTime` TIME(0) NOT NULL,
   `closingTime` TIME(0) NOT NULL,
   `FK_restaurant` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`PK_idRestaurantAvailabilities`),
+<<<<<<< Updated upstream
   CONSTRAINT `fk_Restaurant_Availability`
+=======
+  INDEX `fk_Restaurant_idx` (`FK_restaurant` ASC),
+  CONSTRAINT `fk_Restaurant2`
+>>>>>>> Stashed changes
     FOREIGN KEY (`FK_restaurant`)
     REFERENCES `main`.`Restaurant` (`PK_idRestaurant`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
+<<<<<<< Updated upstream
 AUTO_INCREMENT = 1;
 
 CREATE INDEX `fk_Restaurant_idx` ON `main`.`RestaurantAvailabilities` (`FK_restaurant` ASC);
@@ -137,4 +188,8 @@ CREATE INDEX `fk_Restaurant_idx` ON `main`.`RestaurantAvailabilities` (`FK_resta
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+=======
+ENGINE = InnoDB
+AUTO_INCREMENT = 1;
+>>>>>>> Stashed changes
 

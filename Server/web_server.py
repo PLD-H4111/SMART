@@ -30,8 +30,6 @@ PORT_NUMBER		  = 80
 
 
 
-
-
 class HTTPHandler(BaseHTTPRequestHandler):
 	"""HTTPHandler
 	
@@ -40,8 +38,13 @@ class HTTPHandler(BaseHTTPRequestHandler):
 	Attributes:
 		sessions: blabla
 	"""
-	sessions = {}
-
+	# attr1 = 0 
+	
+	def __init__(self, request, client_address, server):
+		self.sessions = {}
+		self.actionServlet = action_servlet.ActionServlet()
+		BaseHTTPRequestHandler.__init__(self, request, client_address, server)
+		
 
 	def _set_headers(self):
 		""" define the common headers for all the requests """
@@ -94,7 +97,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 		#print("input", self.headers)#['Content-Length'])#input_data)
 				
 		if path=="/action_servlet":
-			result = action_servlet.fetch(params)
+			result = self.actionServlet.fetch(params)
 			self.send_response(200)
 			self.send_header('Content-type', "text/html")
 			self.end_headers()
