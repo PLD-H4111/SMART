@@ -3,12 +3,12 @@
 
 import json
 
-def sensor_upload(database, timestamp, sensor_id, value):
+def sensor_upload(database, date_time, sensor_id, value):
     """ """
     try:
         insert_query = "INSERT INTO Measure (dateTime, FK_sensor, measure) VALUES (%s, %s, %s)"
         cursor = database.cursor()
-        cursor.execute(insert_query, (timestamp, sensor_id, value))
+        cursor.execute(insert_query, (date_time, sensor_id, value))
         database.commit()
         return '{"status": "ok"}'
     except Exception as ex:
