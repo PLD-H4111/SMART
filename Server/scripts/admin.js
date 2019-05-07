@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $.ajax({
         url: "/action_servlet",
+        type: "post",
         data: {
             "action": "get-all-restaurants-news"
         },
@@ -29,6 +30,7 @@ function update_news(news) {
 function logout() {
     $.ajax({
         url: "/action_servlet",
+        type: "post",
         data: {
             "action": "admin-logout"
         }

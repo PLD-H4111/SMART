@@ -21,6 +21,7 @@ function login() {
     
     $.ajax({
         url: "/action_servlet",
+        type: "post",
         data: {
             "action": "admin-login",
             "login": login,

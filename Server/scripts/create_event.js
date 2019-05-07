@@ -4,6 +4,7 @@ $(document).ready(function() {
     restaurant_checkboxes = [];
     $.ajax({
         url: "action_servlet",
+        type: "post",
         data: {
             "action": "get-restaurants-list"
         },
@@ -36,6 +37,7 @@ function create() {
     } else {
         $.ajax({
             url: "action_servlet",
+            type: "post",
             data: {
                 "action": "create-restaurants-news",
                 "title": $("#title").val(),

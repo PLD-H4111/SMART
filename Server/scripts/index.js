@@ -10,6 +10,7 @@ $(document).ready(function() {
     restaurant_checkboxes = [];
     $.ajax({
         url: "action_servlet",
+        type: "post",
         data: {
             "action": "get-restaurants-list"
         },
@@ -45,6 +46,7 @@ function update() {
     
     $.ajax({
         url: "action_servlet",
+        type: "post",
         data: {
             "action": "get-restaurant-details",
             "restaurants": restaurant_ids,

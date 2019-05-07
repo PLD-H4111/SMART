@@ -2,6 +2,7 @@ $(document).ready(function() {
     let id = window.location.href.substr(window.location.href.indexOf('=') + 1)
     $.ajax({
         url: "/action_servlet",
+        type: "post",
         data: {
             "action": "get-event-details",
             "event": id

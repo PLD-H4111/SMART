@@ -11,6 +11,7 @@ function update_page(date) {
     let restaurant = window.location.href.substr(window.location.href.indexOf('=') + 1)
     $.ajax({
         url: "/action_servlet",
+        type: "post",
         data: {
             "action": "get-restaurant-details",
             "restaurants": [restaurant],
@@ -24,6 +25,7 @@ function update_page(date) {
     });
     $.ajax({
         url: "/action_servlet",
+        type: "post",
         data: {
             "action": "get-restaurant-news",
             "restaurant": restaurant,
