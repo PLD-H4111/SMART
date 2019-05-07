@@ -41,10 +41,10 @@ function update_page(date) {
 }
 
 function update_infos(data) {
-    $("#restaurant-name").html(data.name);
-    $("#restaurant-theme").html(data.theme);
-    $("#restaurant-schedule").html(data.schedule); // array !
-    $("#restaurant-status").html(data.status);
+    $("#restaurant-name").text(data.name);
+    $("#restaurant-theme").text(data.theme);
+    $("#restaurant-schedule").text(data.schedule); // array !
+    $("#restaurant-status").html(create_status(data.status));
     $("#restaurant-current-waiting-time").html(data.eta + " min");
 }
 
@@ -54,7 +54,7 @@ function update_news(events) {
     }
     let html = '<div class="col-lg-12">';
     events.forEach(function(item) {
-        html += '<div class="card mt-2 border-primary">';
+        html += '<div class="card mt-2 mb-2 border-primary">';
         html += '<div class="card-header bg-primary text-white">' + item.name + ' (' + item.start + ' -> ' + item.end + ')</div>';
         html += '<div class="card-body">' + item.content + '</div>';
         html += '</div>';

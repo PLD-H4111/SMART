@@ -48,4 +48,3 @@ def get_restaurant_details(database, restaurant_id, date):
             "error": "the restaurant ID doesn't exist in the database."
         }'''
     return json_result
-
