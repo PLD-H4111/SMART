@@ -5,13 +5,12 @@
     <title>Oblivion</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="styles/common.css">
     <link rel="manifest" href="manifest.json">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="scripts/common.js"></script>
     <script src="scripts/notifications.js"></script>
     <script src="scripts/event_details.js"></script>
@@ -20,15 +19,13 @@
 <body>
     <div class="jumbotron text-center">
         <h1>Détails de l'évenement</h1>
+        <h2 id="event-title"></h2>
     </div>
     
     <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <div class="row">
-                    <div class="col-sm-12">
-                        <h3 id="event-title"></h3>
-                    </div>
                     <div class="col-sm-12">
                         <h3>Description de la nouvelle</h3>
                         <textarea readonly class="md-textarea form-control" id="event-content" rows="4"></textarea>
@@ -62,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="redirect('admin.html')">Retour</button>
+        <a class="btn btn-primary" href="admin.html" role="button">Retour</a>
     </div>
 </body>
 

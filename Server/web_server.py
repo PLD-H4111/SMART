@@ -93,7 +93,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
             '.jpeg': "image/jpeg",
             '.ico': "image/x-icon",
             '.svg': "image/svg+xml",
-            '.js': "application/javascript"
+            '.js': "application/javascript",
+            '.json': "application/json"
         }
         
         path = urllib.parse.urlparse(self.path).path

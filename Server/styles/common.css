@@ -1,6 +1,5 @@
 #chartdiv {
     width: 100%;
-    height: 500px;
 }
 
 .table {
@@ -14,7 +13,6 @@ input[type="checkbox"] {
 #date-picker {
     margin-bottom: 20px;
 }
-
 
 .status_open {
     color: green;
