@@ -21,17 +21,30 @@ class ActionServlet:
     
     def fetch(self, input_data):
         """ """
-        if "action" not in input_data:
-            # pas la bonne structure de l'input data
-            pass
-
         print("action servlet:", input_data["action"][0])
         print(input_data)
         
-        if input_data["action"][0] == "get-restaurants-list":    
-            return service1.get_restaurants(self.mydb)
-        elif input_data["action"][0] == "get-restaurant-details":
-            return service2.get_restaurants_details(self.mydb, input_data["restaurants[]"][0], input_data["date"][0])
+        if "action" not in input_data:
+            json_error = '''{
+                "error": "there's no 'action' parameter in the parameters passed as input"
+            }'''
+            return json_error
         else:
-            pass
+            if input_data["action"][0] == "get-restaurants-list":    
+                return service1.get_restaurants(self.mydb)
+            elif input_data["action"][0] == "get-restaurant-details":
+                if "restaurants[]" not in input_data:
+                    json_error = '''{
+                        "error": "there's no 'restaurants[]' parameter in the parameters passed as input"
+                    }'''
+                    return json_error
+                if "date" not in input_data:
+                    json_error = '''{
+                        "error": "there's no 'date' parameter in the parameters passed as input"
+                    }'''
+                    return json_error
+                else:
+                    return service2.get_restaurants_details(self.mydb, input_data["restaurants[]"][0], input_data["date"][0])
+            else:
+                pass
 
