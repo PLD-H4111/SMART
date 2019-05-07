@@ -9,6 +9,7 @@ INSERT INTO `main`.`Restaurant` (`PK_idRestaurant`, `name`, `theme`) VALUES (DEF
 INSERT INTO `main`.`Restaurant` (`PK_idRestaurant`, `name`, `theme`) VALUES (DEFAULT, 'PiedDuSaule', 'prof');
 INSERT INTO `main`.`Restaurant` (`PK_idRestaurant`, `name`, `theme`) VALUES (DEFAULT, 'Prevert', 'fast food');
 INSERT INTO `main`.`Restaurant` (`PK_idRestaurant`, `name`, `theme`) VALUES (DEFAULT, 'Olivier', 'italien');
+INSERT INTO `main`.`Restaurant` (`PK_idRestaurant`, `name`, `theme`) VALUES (DEFAULT, 'Grillon', 'grillades grasses');
 INSERT INTO `main`.`Restaurant` (`PK_idRestaurant`, `name`, `theme`) VALUES (DEFAULT, 'Grillon', 'grillades');
 
 COMMIT;
@@ -44,8 +45,10 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `main`;
-INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, `FK_restaurant`) VALUES (DEFAULT, 'rentrée scolaire', '2019-05-05', '2019-05-05', NULL);
-INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, `FK_restaurant`) VALUES (DEFAULT, 'veille de vacances', '2019-09-21', '2019-09-21', NULL);
+INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, FK_restaurant, eventDescription) VALUES (DEFAULT, 'rentrée scolaire', '2019-05-05', '2019-05-05', 1, NULL);
+INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, FK_restaurant, eventDescription) VALUES (DEFAULT, 'veille de vacances', '2019-09-21', '2019-09-21', 1, NULL);
+INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, FK_restaurant, eventDescription) VALUES (DEFAULT, 'rentrée scolaire', '2019-05-05', '2019-05-05', 2, NULL);
+INSERT INTO `main`.`Event` (`PK_idEvent`, `name`, `beginningDate`, `endingDate`, FK_restaurant, eventDescription) VALUES (DEFAULT, 'veille de vacances', '2019-09-21', '2019-09-21', 2, NULL);
 
 COMMIT;
 
@@ -56,6 +59,46 @@ COMMIT;
 START TRANSACTION;
 USE `main`;
 INSERT INTO `main`.`RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, `date`, `openingTime`, `closingTime`, `FK_restaurant`) VALUES (DEFAULT, '2019-05-02', '11:30:00', '13:30:00', 1);
-INSERT INTO `main`.`RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, `date`, `openingTime`, `closingTime`, `FK_restaurant`) VALUES (DEFAULT, '2019-05-02', '11:30:00', '13:30:00', 1);
+INSERT INTO `main`.`RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, `date`, `openingTime`, `closingTime`, `FK_restaurant`) VALUES (DEFAULT, '2019-05-02', '18:00:00', '20:00:00', 1);
+INSERT INTO `main`.`RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, `date`, `openingTime`, `closingTime`, `FK_restaurant`) VALUES (DEFAULT, '2019-05-02', '11:30:00', '13:30:00', 2);
+INSERT INTO `main`.`RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, `date`, `openingTime`, `closingTime`, `FK_restaurant`) VALUES (DEFAULT, '2019-05-02', '18:00:00', '20:00:00', 2);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `main`.`Measure`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `main`;
+INSERT INTO `main`.`Measure` (`PK_idMeasure`, `dateTime`, `measure`, `FK_sensor`) VALUES (DEFAULT, '2019-05-02 12:01:00', 1, 1);
+INSERT INTO `main`.`Measure` (`PK_idMeasure`, `dateTime`, `measure`, `FK_sensor`) VALUES (DEFAULT, '2019-05-02 12:02:00', 0, 1);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `main`.`WaitingTime`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `main`;
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 300, '2019-05-02 12:05:00', 1);
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 600, '2019-05-02 12:06:00', 1);
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 780, '2019-05-02 12:07:00', 1);
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 700, '2019-05-02 12:07:00', 1);
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 310, '2019-05-02 12:05:00', 2);
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 610, '2019-05-02 12:06:00', 2);
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 790, '2019-05-02 12:07:00', 2);
+INSERT INTO `main`.`WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES (DEFAULT, 710, '2019-05-02 12:07:00', 2);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `main`.`user`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `main`;
+INSERT INTO `main`.`user` (`PK_idUser`, `identifiant`, `password`) VALUES (DEFAULT, "admin", "admin");
 
 COMMIT;

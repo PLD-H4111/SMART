@@ -7,14 +7,14 @@ import json
 
 
 def get_restaurants_details(database, restaurants_ids, date):
-	""" """
-	json_result = """{ "restaurants": ["""
-	for i, restaurant_id in enumerate(restaurants_ids):
-		json_result += get_restaurant_details(database, restaurant_id, date)
-		if i != len(restaurants_ids)-1:
-			json_result += ", "
-	json_result += """ ] } """
-	return json_result
+    """ """
+    json_result = """{ "restaurants": ["""
+    for i, restaurant_id in enumerate(restaurants_ids):
+        json_result += get_restaurant_details(database, restaurant_id, date)
+        if i != len(restaurants_ids)-1:
+            json_result += ", "
+    json_result += """ ] } """
+    return json_result
 
 
 def get_restaurant_details(database, restaurant_id, date):

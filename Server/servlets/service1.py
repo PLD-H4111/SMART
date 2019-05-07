@@ -37,7 +37,11 @@ def get_restaurants(database):
 
     restaurants = """{"restaurants": ["""
     for i, restaurant in enumerate(myresult):
-        restaurants += """{{ "id":{}, "name":"{}", "theme": "{}" ,"status":"closed", "eta":2500 }}""".format(restaurant[0], restaurant[1], restaurant[2])
+        restaurants += """{{ "id": {},
+                             "name": "{}",
+                             "theme": "{}",
+                             "status": "closed",
+                             "eta": 2500 }}""".format(restaurant[0], restaurant[1], restaurant[2])
         if i != len(myresult)-1:
             restaurants += ","
     restaurants += """ ] } """
