@@ -21,16 +21,49 @@
     <div class="jumbotron text-center">
         <h1>Détails de l'évenement</h1>
     </div>
-
-    <div class="container">
-        <h2 id="event-title"></h2>
-        <p id="event-content"></p>
-        <p id="event-start-date"></p>
-        <p id="event-end-date"></p>
-        <p id="event-restaurants"></p>
-    </div>
     
-    <button type="button" class="btn btn-primary" onclick="redirect('admin.html')">Retour</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 id="event-title"></h3>
+                    </div>
+                    <div class="col-sm-12">
+                        <h3>Description de la nouvelle</h3>
+                        <textarea readonly class="md-textarea form-control" id="content" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>Date de début</h3>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>Date de fin</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p id="event-start-date"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p id="event-end-date"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Restaurants impliqués</h3>         
+                        <table class="table table-hover">
+                        <tbody id="event-restaurants"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="redirect('admin.html')">Retour</button>
+    </div>
 </body>
 
 </html>

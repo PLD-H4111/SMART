@@ -100,7 +100,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         path = urllib.parse.urlparse(self.path).path
         params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
         
-        ADMIN_PAGES = {"/admin.html", "/news.html"}
+        ADMIN_PAGES = {"/admin.html", "/create_event.html"}
         AUTHENTICATION_PAGE = "login.html"
         MAIN_ADMIN_PAGE = "admin.html"
         INDEX_PAGE = "index.html"
