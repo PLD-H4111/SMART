@@ -6,44 +6,52 @@ import json
 def get_restaurant_event(database, restaurant_id, date):
     """ """
     
-    request = "select * from Event where FK_idRestaurant = " + restaurant_id
+    request = "select name, eventDescription, beginningDate, endingDate from Event where FK_Restaurant = " + restaurant_id
     mycursor = database.cursor()    
     mycursor.execute(request)
-    queryResult = mycursor.fetchone()
+    result = mycursor.fetchall()
     
-    if queryResult != None:   
-        json_result = """{ "events": [""" 
-        json_result += '''{{
-            "name": "",
-            "start": "",
-            "end": "",
-            "content": "",
-            
-        }}'''.format(queryResult[1], queryResult[2])
+    if result != None:
+        json_result = """{ "events": ["""
+        for index in range(len(result)):
+            json_result += '''{{
+                "name": "{}",
+                "content": "{}",
+                "start": "{}",
+                "end": "{}"
+            }}{}'''.format(result[index][0],
+                           result[index][1],
+                           result[index][2],
+                           result[index][3],
+                           "" if index == len(result)-1 else ",")
+        json_result += """ ] } """
     else:
         json_result = '''{
             "error": "Events for this restaurant doesn't exist in the database."
         }'''
         
-    json_result += """ ] } """
     return json_result;
 
 def get_all_restaurants_events(database):
     """ """
-    request = "select * from Event"
+    request = "select PK_idEvent, name, beginningDate, endingDate from Event"
     mycursor = database.cursor()    
     mycursor.execute(request)
-    queryResult = mycursor.fetchone()
+    result = mycursor.fetchall()
     
-    if queryResult != None:    
+    if result != None:
         json_result = """{ "events": ["""
-        
-        
-        json_result += '''{{
-            "name": "",
-            "start": "",
-            "end": "" 
-        }}'''.format(queryResult[1], queryResult[2])
+        for index in range(len(result)):
+            json_result += '''{{
+                "id": {},
+                "name": "{}",
+                "start": "{}",
+                "end": "{}"
+            }}{}'''.format(result[index][0],
+                           result[index][1],
+                           result[index][2],
+                           result[index][3],
+                           "" if index == len(result)-1 else ",")
         json_result += """ ] } """
     else:
         json_result = '''{
@@ -54,21 +62,22 @@ def get_all_restaurants_events(database):
 
 def get_event_details(database, event_id):
     """ """       
-    request = "select * from Event where PK_idEvent = " + event_id
+    request = "select Event.name, eventDescription, beginningDate, endingDate, Restaurant.name from Event, Restaurant where Restaurant.PK_idRestaurant = Event.FK_Restaurant and PK_idEvent = " + event_id
     mycursor = database.cursor()    
     mycursor.execute(request)
-    queryResult = mycursor.fetchone()
-    
-    print(queryResult)
-    
+    result = mycursor.fetchall()
+
     json_result = ""
-    if queryResult != None:    
-        json_result = '''{{
+    if result != None:
+        json_result = '''{{ "event": {{
             "name": "{}",
+            "content": "{}",
             "start": "{}",
-            "end": "",
-            "content": ""
-        }}'''.format(queryResult[1], queryResult[2])
+            "end": "{}",
+            "restaurants": ['''.format(result[0][0], result[0][1], result[0][2], result[0][3])
+        for index in range(len(result)):
+            json_result += '''"{}"{} '''.format(result[index][4], "" if index == len(result)-1 else ",")
+        json_result += '''] }}'''
     else:
         json_result = '''{
             "error": "the event ID doesn't exist in the database."

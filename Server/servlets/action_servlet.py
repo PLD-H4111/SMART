@@ -29,7 +29,8 @@ class ActionServlet:
             host="sql7.freemysqlhosting.net",
             user="sql7290893",
             passwd="bwykkiQ1WX",
-            database="sql7290893"
+            database="sql7290893",
+            use_pure=True
         )
     
     def fetch(self, user_data, input_data):
@@ -73,7 +74,9 @@ class ActionServlet:
                 else:
                     return service3.login(self.mydb, user_data, input_data["login"], input_data["password"])
             elif input_data["action"] == "create-restaurants-events":
-                return user_data, service4.create_restaurants_event(input_data["title"],
+                print(input_data)
+                return user_data, service4.create_restaurants_event(self.mydb,
+                                                                   input_data["title"],
                                                                    input_data["content"],
                                                                    input_data["start"],
                                                                    input_data["end"],
