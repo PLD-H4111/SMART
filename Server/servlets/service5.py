@@ -34,7 +34,7 @@ def get_restaurant_event(database, restaurant_id, date):
 
 def get_all_restaurants_events(database):
     """ """
-    request = "select PK_idEvent, name, beginningDate, endingDate from Event"
+    request = "select PK_idEvent, Event.name, beginningDate, endingDate, Restaurant.name from Event, Restaurant where Restaurant.PK_idRestaurant = Event.FK_Restaurant"
     mycursor = database.cursor()    
     mycursor.execute(request)
     result = mycursor.fetchall()
@@ -46,11 +46,13 @@ def get_all_restaurants_events(database):
                 "id": {},
                 "name": "{}",
                 "start": "{}",
-                "end": "{}"
+                "end": "{}",
+                "restaurant": "{}"
             }}{}'''.format(result[index][0],
                            result[index][1],
                            result[index][2],
                            result[index][3],
+                           result[index][4],
                            "" if index == len(result)-1 else ",")
         json_result += """ ] } """
     else:

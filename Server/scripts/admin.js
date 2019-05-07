@@ -23,6 +23,7 @@ function update_news(events) {
             + "</td>"
             + "<td>" + events[i].start + "</td>"
             + "<td>" + events[i].end  + "</td>"
+            + "<td>" + events[i].restaurant  + "</td>"
             + "</tr>"
         );
     }
