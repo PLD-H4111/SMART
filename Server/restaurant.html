@@ -33,9 +33,9 @@
                 <div id="chartdiv"></div>
             </div>
             <div class="col-lg-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Informations</div>
-                    <div class="panel-body">
+                <div class="card mt-2 mb-2 border-primary">
+                    <div class="card-header bg-primary text-white">Informations</div>
+                    <div class="card-body">
                         <table class="table">
                             <tbody>
                             <tr>
@@ -47,10 +47,6 @@
                                 <td id="restaurant-status"></td>
                             </tr>
                             <tr>
-                                <td>Débit</td>
-                                <td id="restaurant-throughput"></td>
-                            </tr>
-                            <tr>
                                 <td>Attente</td>
                                 <td id="restaurant-current-waiting-time"></td>
                             </tr>
@@ -58,13 +54,11 @@
                         </table>
                     </div>
                 </div>
-                <input type="date" class="form-control" id="date-picker" onchange="calendar_handler();">
+                <input type="date" class="form-control mb-2" id="date-picker" onchange="calendar_handler();">
                 <a class="btn btn-primary" href="index.html" role="button">Retour</a>
             </div>
         </div>
-        <div class="row">
-            <div id="news"></div>
-        </div>
+        <div class="row" id="events"></div>
     </div>
 </body>
 

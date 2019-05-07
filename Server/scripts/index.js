@@ -52,7 +52,7 @@ function update() {
         data: JSON.stringify({
             "action": "get-restaurant-details",
             "restaurants": restaurant_ids,
-            "date": 0
+            "date": new Date()
         }),
         dataType: "json",
         success: function(data) {

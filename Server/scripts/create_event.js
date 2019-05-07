@@ -30,9 +30,9 @@ function create() {
     let feedback = validate_input();
     if(feedback.error) {
         $("#feedback").html(
-            '<div class="panel panel-danger">'
-          + '<div class="panel-heading">Erreur</div>'
-          + '<div class="panel-body">' + feedback.error + '</div>'
+            '<div class="card border-danger">'
+          + '<div class="card-header bg-danger text-white">Erreur</div>'
+          + '<div class="card-body">' + feedback.error + '</div>'
           + '</div>'
         );
     } else {
