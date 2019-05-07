@@ -4,7 +4,7 @@ $(document).ready(function() {
         type: "post",
         contentType: "application/json",
         data: JSON.stringify({
-            "action": "get-all-restaurants-news"
+            "action": "get-all-restaurants-events"
         }),
         dataType: "json",
         success: function(data) {

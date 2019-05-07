@@ -29,7 +29,7 @@ function update_page(date) {
         type: "post",
         contentType: "application/json",
         data: JSON.stringify({
-            "action": "get-restaurant-news",
+            "action": "get-restaurant-events",
             "restaurant": restaurant,
             "date": date
         }),

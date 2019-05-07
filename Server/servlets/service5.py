@@ -28,7 +28,7 @@ def get_restaurant_event(database, restaurant_id, date):
     json_result += """ ] } """
     return json_result;
 
-def get_all_restaurants_news():
+def get_all_restaurants_events(database):
     """ """
     request = "select * from Event"
     mycursor = database.cursor()    
@@ -44,16 +44,15 @@ def get_all_restaurants_news():
             "start": "",
             "end": "" 
         }}'''.format(queryResult[1], queryResult[2])
+        json_result += """ ] } """
     else:
         json_result = '''{
             "error": "Events doesn't exist in the database."
         }'''
-        
-    json_result += """ ] } """
     return json_result;
 
 
-def get_event_details(event_id):
+def get_event_details(database, event_id):
     """ """       
     request = "select * from Event where PK_idEvent = " + event_id
     mycursor = database.cursor()    
