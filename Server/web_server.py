@@ -32,6 +32,7 @@ PORT_NUMBER = 80
 
 # TODO: fix login enter key
 # TODO: fix redirection in login
+# TODO: fix sessions with posts
 
 
 

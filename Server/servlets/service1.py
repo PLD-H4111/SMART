@@ -17,7 +17,7 @@ import json
 
 
 
-def get_restaurants0(database):
+def get_restaurants(database):
     """ """
     restaurants = '''{"restaurants": 
         [
@@ -54,7 +54,7 @@ def get_restaurants0(database):
     
     
     
-def get_restaurants(database):
+def get_restaurants0(database):
     """ """
     restaurants = '''{"restaurants": 
         [
