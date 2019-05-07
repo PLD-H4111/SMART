@@ -19,7 +19,7 @@ function update_event(event) {
     $("#event-start-date").html(event.start);
     $("#event-end-date").html(event.end);
     event.restaurants.forEach(function(name) {
-        $("#event-restaurants").append(name + "<br/>");
+        $("#event-restaurants").append("<tr><td>" + name + "</td></tr>");
     });
 }
 
