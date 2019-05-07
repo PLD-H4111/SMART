@@ -33,6 +33,8 @@ PORT_NUMBER = 80
 # TODO: fix login enter key
 # TODO: fix redirection in login
 # TODO: fix sessions with posts
+# TODO: error403 must send 403 code
+# TODO: créer une session seulement si on en a besoin
 
 
 
