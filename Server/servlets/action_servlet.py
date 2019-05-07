@@ -30,7 +30,8 @@ class ActionServlet:
             host="sql7.freemysqlhosting.net",
             user="sql7290893",
             passwd="bwykkiQ1WX",
-            database="sql7290893"
+            database="sql7290893",
+            use_pure=True
         )
     
     def fetch(self, user_data, input_data):
@@ -73,20 +74,22 @@ class ActionServlet:
                     return user_data, json_error
                 else:
                     return service3.login(self.mydb, user_data, input_data["login"], input_data["password"])
-            elif input_data["action"] == "create-restaurants-news":
-                return user_data, service4.create_restaurants_event(input_data["title"],
+            elif input_data["action"] == "create-restaurants-events":
+                print(input_data)
+                return user_data, service4.create_restaurants_event(self.mydb,
+                                                                   input_data["title"],
                                                                    input_data["content"],
                                                                    input_data["start"],
                                                                    input_data["end"],
                                                                    input_data["restaurants"])
-            elif input_data["action"] == "get-restaurant-news":
+            elif input_data["action"] == "get-restaurant-events":
                 return user_data, service5.get_restaurant_event(self.mydb, input_data["restaurant"], input_data["date"])
-            elif input_data["action"] == "get-all-restaurants-news":
-                return user_data, service5.get_all_restaurants_event()
+            elif input_data["action"] == "get-all-restaurants-events":
+                return user_data, service5.get_all_restaurants_events(self.mydb)
             elif input_data["action"] == "get-event-details":
-                return user_data, service5.get_event_details(input_data["event"])
+                return user_data, service5.get_event_details(self.mydb, input_data["event"])
             elif input_data["action"] == "sensor-upload":
-                return user_data, sensor_upload.sensor_upload(self.mydb, input_data["timestamp"], input_data["sensor_id"], input_data["value"])
+                return user_data, sensor_upload.sensor_upload(self.mydb, input_data["date_time"], input_data["sensor_id"], input_data["value"])
             elif input_data["action"] == "get-sensor-data":
                 if "start_date" not in input_data:
                     json_error = '''{

@@ -4,25 +4,26 @@ $(document).ready(function() {
         type: "post",
         contentType: "application/json",
         data: JSON.stringify({
-            "action": "get-all-restaurants-news"
+            "action": "get-all-restaurants-events"
         }),
         dataType: "json",
         success: function(data) {
-            update_news(data.news);
+            update_news(data.events);
         }
     });
 });
 
-function update_news(news) {
-    $("#news-list").empty()
-    for(var i=0; i<news.length; i++) {
-        $("#news-list").append(
+function update_news(events) {
+    $("#events-list").empty()
+    for(var i=0; i<events.length; i++) {
+        $("#events-list").append(
             "<tr>"
             + "<td>"
-            +    "<a href='event_details.html?id=" + news[i].id +"'>" + news[i].title + "</a>"
+            +    "<a href='event_details.html?id=" + events[i].id +"'>" + events[i].name + "</a>"
             + "</td>"
-            + "<td>" + news[i].start + "</td>"
-            + "<td>" + news[i].end  + "</td>"
+            + "<td>" + events[i].start + "</td>"
+            + "<td>" + events[i].end  + "</td>"
+            + "<td>" + events[i].restaurant  + "</td>"
             + "</tr>"
         );
     }

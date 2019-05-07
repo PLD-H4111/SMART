@@ -52,7 +52,7 @@ function update() {
         data: JSON.stringify({
             "action": "get-restaurant-details",
             "restaurants": restaurant_ids,
-            "date": 0
+            "date": new Date()
         }),
         dataType: "json",
         success: function(data) {
@@ -63,14 +63,5 @@ function update() {
 
 function checkbox_handler() {
     update();
-}
-
-function create_status(status) {
-    if(status === "open") {
-        return "<span class='status_open'>OUVERT</span>";
-    }
-    if(status === "closed") {
-        return "<span class='status_closed'>FERME</span>";
-    }
 }
 

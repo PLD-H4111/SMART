@@ -16,10 +16,10 @@ $(document).ready(function() {
 });
 
 function update_event(event) {
-    $("#event-title").html(event.title);
-    $("#event-content").html(event.content);
-    $("#event-start-date").html(event.start);
-    $("#event-end-date").html(event.end);
+    $("#event-title").text(event.name);
+    $("#event-content").text(event.content);
+    $("#event-start-date").text(event.start);
+    $("#event-end-date").text(event.end);
     event.restaurants.forEach(function(name) {
         $("#event-restaurants").append("<tr><td>" + name + "</td></tr>");
     });

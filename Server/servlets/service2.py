@@ -33,7 +33,7 @@ def get_restaurant_details(database, restaurant_id, date):
             "name": "{}",
             "theme": "{}",
             "status": "open",
-            "schedule": "7/7 24/24",
+            "schedule": ["12h-14h", "18h-20h"],
             "throughput": "8p/min",
             "eta": 15,
             "data": [
@@ -48,4 +48,3 @@ def get_restaurant_details(database, restaurant_id, date):
             "error": "the restaurant ID doesn't exist in the database."
         }'''
     return json_result
-

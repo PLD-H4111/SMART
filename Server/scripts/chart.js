@@ -92,6 +92,10 @@ function update_chart(restaurants, date) {
                 chart.scrollbarX.series.push(series_predicted);
             }
         }
+        
+        chart.events.on("datavalidated", function(ev) {
+            chart.svgContainer.htmlElement.style.height = 500 + chart.legend.contentHeight + "px";
+        });
     });
 }
 
