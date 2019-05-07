@@ -25,8 +25,15 @@ import action_servlet
 
 
 
-HOST_NAME          = '127.0.0.1'
-PORT_NUMBER          = 80
+HOST_NAME   = '0.0.0.0' #'127.0.0.1'
+PORT_NUMBER = 80
+
+
+
+# TODO: fix login enter key
+# TODO: fix redirection in login
+
+
 
 
 
@@ -38,24 +45,22 @@ class HTTPHandler(BaseHTTPRequestHandler):
     Attributes:
         sessions: blabla
     """
-    # attr1 = 0 
+    # attr1 = 0
+    sessions = {}
     
     def __init__(self, request, client_address, server):
-        self.sessions = {}
+        """ constructor """
         self.actionServlet = action_servlet.ActionServlet()
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
         
 
-    def _set_headers(self):
+    def set_headers(self, mimetype="text/html"):
         """ define the common headers for all the requests """
         self.send_response(200)
         #self.send_response(http.client.OK)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', mimetype)
         self.send_header("Access-Control-Allow-Origin", "*")
-        # set the cookies
-        #self.send_header('Cookie', self.cookieHeader)
-        #self.send_header('Set-Cookie', list(self.cookies.values())[i].output(header=''))
-        ###self.send_header('Set-Cookie', self.cookies.output(header=''))
+        self.send_header('Set-Cookie', self.cookies.output(header=''))
         self.end_headers()
 
 
@@ -71,7 +76,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     def do_HEAD(self):
         """ method: HEAD """
-        self._set_headers()
+        self.set_headers()
 
     
     def do_GET(self):
@@ -87,27 +92,27 @@ class HTTPHandler(BaseHTTPRequestHandler):
             '.svg': "image/svg+xml",
             '.js': "application/javascript"
         }
+        print("\ndebut GET sessions", self.sessions)
         
         # get the cookies
-        self.cookieHeader    = self.headers.get('Cookie')
+        self.cookieHeader   = self.headers.get('Cookie')
         self.cookies        = http.cookies.SimpleCookie( self.cookieHeader )
         
         path = urllib.parse.urlparse(self.path).path
         params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
-        #input_data            = self.rfile.read( int(self.headers['Content-Length']) )
-        #print("path", path)
-        #print("params", params)
-        #print("input", self.headers)#['Content-Length'])#input_data)
         
-        ADMIN_PAGES = {"/admin.html"}
+        ADMIN_PAGES = {"/admin.html", "/news.html"}
         AUTHENTIFICATION_PAGE = "login.html"
+        MAIN_ADMIN_PAGE = "admin.html"
         INDEX_PAGE = "index.html"
         
+        user_data = self._get_user_data()
+        
         if path=="/action_servlet":
-            result = self.actionServlet.fetch(params)
-            self.send_response(200)
-            self.send_header('Content-type', "text/html")
-            self.end_headers()
+            user_data, result = self.actionServlet.fetch(user_data, params)
+            self.sessions[ int(self.cookies["session-id"].value) ] = user_data
+            self.set_headers()
+            #print(result)
             self.wfile.write(result.encode("utf8"))
         else:
             if path == "/":
@@ -115,31 +120,28 @@ class HTTPHandler(BaseHTTPRequestHandler):
                         
             # Check file extension and set the right mime type
             sendReply = False
+            mimetype = "text/html"
             for extension, type in mimetypes.items():
                 if path.endswith(extension):
                     mimetype = type
                     sendReply = True
                     break
 
-            if sendReply == True:
-                # Open the static file requested and send it
-                try:
-                    if path in ADMIN_PAGES:
-                        user_data = self._get_user_data()
-                        if user_data == None:
-                            path = AUTHENTIFICATION_PAGE
-                    # TODO: tester avec params
-                        
-                    f = open(os.curdir + os.sep + path, mode='rb')
-                    self.send_response(200)
-                    self.send_header('Content-type', mimetype)
-                    self.end_headers()
-                    self.wfile.write(f.read())#.encode())
-                    f.close()
-                except IOError:
-                    self.send_error(404,'File Not Found: %s' % self.path)
-            else: # acces non autorisé
-                self.send_error(403,'The access tp "%s" is forbidden' % self.path)
+            if not sendReply: # Forbidden
+                path = "error403.html"
+            print("user data avant admin pages", user_data)
+            if path in ADMIN_PAGES:
+                if user_data == None:
+                    path = AUTHENTIFICATION_PAGE
+            # TODO: tester avec params
+            try:
+                f = open(os.curdir + os.sep + path, mode='rb')
+                #self.sessions[ int(self.cookies["session-id"].value) ] = user_data
+                self.set_headers(mimetype)
+                self.wfile.write(f.read())#.encode())
+                f.close()
+            except IOError:
+                self.send_error(404,'File Not Found: %s' % self.path)
         return
 
     def _get_user_data(self):
@@ -147,6 +149,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         user_data = None
         print("self.cookieHeader:\n", self.cookieHeader)
         print("self.cookies:\n", self.cookies)
+        print("sessions: ", self.sessions)
         if (self.cookieHeader == None                   or # no cookie at all
                 "session-id" not in self.cookies        or # no session-id in the cookies
                 int(self.cookies["session-id"].value) not in self.sessions ): # wrong session-id
@@ -174,7 +177,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.sessions[ int(self.cookies["session-id"].value) ] = user_data
         encoded_response    = bytes( json_req_result, 'utf-8' )
         
-        self._set_headers()
+        self.set_headers()
         self.wfile.write(encoded_response)
         """
         
@@ -186,7 +189,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         
         encoded_response    = bytes( "bravo", 'utf-8' )
         
-        self._set_headers()
+        self.set_headers()
         self.wfile.write(encoded_response)
 
 
