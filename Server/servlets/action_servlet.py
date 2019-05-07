@@ -8,6 +8,8 @@ import mysql.connector
 import service1
 import service2
 import service3
+import service4
+import service5
 
 
 
@@ -69,6 +71,18 @@ class ActionServlet:
                     return user_data, json_error
                 else:
                     return service3.login(self.mydb, user_data, input_data["login"][0], input_data["password"][0])
+            elif input_data["action"][0] == "create-restaurants-news":
+                return user_data, service4.create_restaurants_event(input_data["title"][0], 
+                                                                   input_data["content"][0],
+                                                                   input_data["start"][0],
+                                                                   input_data["end"][0],
+                                                                   input_data["restaurants[]"][0])
+            elif input_data["action"][0] == "get-restaurant-news":
+                return user_data, service5.get_restaurant_event(input_data["restaurant"][0], input_data["date"][0])
+            elif input_data["action"][0] == "get-all-restaurants-news":
+                return user_data, service5.get_all_restaurants_event()
+            elif input_data["action"][0] == "get-event-details":
+                return user_data, service5.get_event_details(input_data["event"][0])
             else:
                 json_error = '''{{
                     "error": "the action {} is not managed by the server"
