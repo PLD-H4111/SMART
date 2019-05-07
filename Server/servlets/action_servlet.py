@@ -29,7 +29,7 @@ class ActionServlet:
             host="sql7.freemysqlhosting.net",
             user="sql7290893",
             passwd="bwykkiQ1WX",
-            database="sql7290893 "
+            database="sql7290893"
         )
     
     def fetch(self, user_data, input_data):
@@ -47,9 +47,9 @@ class ActionServlet:
             if input_data["action"] == "get-restaurants-list":    
                 return user_data, service1.get_restaurants(self.mydb)
             elif input_data["action"] == "get-restaurant-details":
-                if "restaurants[]" not in input_data:
+                if "restaurants" not in input_data:
                     json_error = '''{
-                        "error": "there's no 'restaurants[]' parameter in the parameters passed as input"
+                        "error": "there's no 'restaurants' parameter in the parameters passed as input"
                     }'''
                     return user_data, json_error
                 elif "date" not in input_data:
