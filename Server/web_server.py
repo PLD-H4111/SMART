@@ -96,6 +96,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         
         path = urllib.parse.urlparse(self.path).path
         
+        
         # get the cookies
         self.cookieHeader   = self.headers.get('Cookie')
         self.cookies        = http.cookies.SimpleCookie( self.cookieHeader )
