@@ -8,6 +8,7 @@ import mysql.connector
 import service1
 import service2
 import service3
+import service_get_data_sensors
 
 
 
@@ -69,6 +70,20 @@ class ActionServlet:
                     return user_data, json_error
                 else:
                     return service3.login(self.mydb, user_data, input_data["login"][0], input_data["password"][0])
+            elif input_data["action"][0] == "get-sensor-data":
+                #if "start_date" not in input_data:
+                    #json_error = '''{
+                    #    "error": "there's no 'start_date' parameter in the parameters passed as input"
+                    #}'''
+                    #return user_data, json_error
+                #elif "end_date" not in input_data:
+                    #json_error = '''{
+                    #    "error": "there's no 'end_date' parameter in the parameters passed as input"
+                    #}'''
+                    #return user_data, json_error
+                #else:
+                    #return user_data, service_get_data_sensors.get_data_from_sensors(self.mydb, input_data["start_date"][0], input_data["end_date"][0])
+                return user_data, service_get_data_sensors.get_data_from_sensors(self.mydb, 0, 0)
             else:
                 json_error = '''{{
                     "error": "the action {} is not managed by the server"
