@@ -10,17 +10,24 @@ import service2
 import service3
 
 
+
 # TODO: verifier l'authentification pour les services sensibles
 # i.e user_data == None
 
 
 class ActionServlet:
     def __init__(self):
-        self.mydb = mysql.connector.connect(
+        """self.mydb = mysql.connector.connect(
             host="localhost",
             user="root",
             passwd="toorTOOR2019!",
             database="main"
+        )"""
+        self.mydb = mysql.connector.connect(
+            host="sql7.freemysqlhosting.net",
+            user="sql7290893",
+            passwd="bwykkiQ1WX",
+            database="sql7290893 "
         )
     
     def fetch(self, user_data, input_data):

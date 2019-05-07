@@ -43,9 +43,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
     This class is an handler for a HTTPServer, it handles GET requests
     
     Attributes:
-        sessions: blabla
+        sessions: a dictionnary which contains the users' data
     """
-    # attr1 = 0
     sessions = {}
     
     def __init__(self, request, client_address, server):
@@ -102,7 +101,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
         
         ADMIN_PAGES = {"/admin.html", "/news.html"}
-        AUTHENTIFICATION_PAGE = "login.html"
+        AUTHENTICATION_PAGE = "login.html"
         MAIN_ADMIN_PAGE = "admin.html"
         INDEX_PAGE = "index.html"
         
@@ -132,7 +131,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
             print("user data avant admin pages", user_data)
             if path in ADMIN_PAGES:
                 if user_data == None:
-                    path = AUTHENTIFICATION_PAGE
+                    path = AUTHENTICATION_PAGE
             # TODO: tester avec params
             try:
                 f = open(os.curdir + os.sep + path, mode='rb')

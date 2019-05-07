@@ -19,7 +19,7 @@ def get_restaurants_details(database, restaurants_ids, date):
 
 def get_restaurant_details(database, restaurant_id, date):
     """ """
-    request = "select * from restaurant where PK_idRestaurant = " + restaurant_id
+    request = "select * from Restaurant where PK_idRestaurant = " + restaurant_id
     mycursor = database.cursor()
     
     mycursor.execute(request)

@@ -29,7 +29,7 @@ def get_restaurants(database):
         ]
     }'''
     
-    request = "select * from restaurant;"
+    request = "select * from Restaurant;"
     mycursor = database.cursor()
     
     mycursor.execute(request)
