@@ -102,7 +102,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         
         # get the cookies
         cookieHeader   = self.headers.get('Cookie')
-        cookies        = http.cookies.SimpleCookie( cookieHeader )
+        cookies        = http.cookies.SimpleCookie(cookieHeader)
         
         ADMIN_PAGES = {"/admin.html", "/create_event.html"}
         AUTHENTICATION_PAGE = "login.html"
@@ -125,14 +125,13 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
         if not sendReply: # Forbidden
             path = "error403.html"
-        print("user data avant admin pages", user_data)
+
         if path in ADMIN_PAGES:
             if user_data == None:
                 path = AUTHENTICATION_PAGE
         # TODO: tester avec input_data
         try:
             f = open(os.curdir + os.sep + path, mode='rb')
-            #self.sessions[ int(self.cookies["session-id"].value) ] = user_data
             self.set_headers(mimetype, cookies)
             self.wfile.write(f.read())#.encode())
             f.close()
@@ -153,34 +152,40 @@ class HTTPHandler(BaseHTTPRequestHandler):
         
         # get the cookies
         cookieHeader   = self.headers.get('Cookie')
-        cookies        = http.cookies.SimpleCookie( cookieHeader )
+        cookies        = http.cookies.SimpleCookie(cookieHeader)
         
         user_data = self._get_user_data(cookieHeader, cookies)
         
-        if path=="/action_servlet":
+        if path == "/action_servlet":
             user_data, result = self.actionServlet.fetch(user_data, input_data)
-            self.sessions[ int(cookies["session-id"].value) ] = user_data
-            self.set_headers(cookies=cookies)
-            #print(result)
+            
+            if user_data != None:
+                if "session-id" not in cookies:
+                    self._create_session(user_data, cookies)
+
+                self.sessions[int(cookies["session-id"].value)] = user_data
+
+            self.set_headers("application/javascript", cookies)
             self.wfile.write(result.encode("utf8"))
         
 
     def _get_user_data(self, cookieHeader, cookies):
         """ check if user_data in cookies, else init them """
         user_data = None
-        print("cookieHeader:", cookieHeader)
-        print("cookies:", cookies)
-        print("sessions: ", self.sessions)
-        if (cookieHeader == None                   or # no cookie at all
-                "session-id" not in cookies        or # no session-id in the cookies
-                int(cookies["session-id"].value) not in self.sessions ): # wrong session-id
-            #sesskey = base64.b64encode( os.urandom(32) ) #.decode("utf8")
-            sesskey = int( random.random()*(10**10) )    # get a sess id
-            cookies["session-id"]    = sesskey        # set the sess id in the cookies
-        else:
-            user_data = self.sessions[ int(cookies["session-id"].value) ]
+        if cookieHeader != None and "session-id" in cookies:
+            session_id = int(cookies["session-id"].value)
+            if session_id in self.sessions:
+                user_data = self.sessions[int(cookies["session-id"].value)]
+            else:
+                del cookies["session-id"]
+                
         return user_data
 
+    def _create_session(self, user_data, cookies):
+        #sesskey = base64.b64encode( os.urandom(32) ) #.decode("utf8")
+        sesskey = int( random.random()*(10**10) )     # get a sess id
+        cookies["session-id"] = sesskey               # set the sess id in the cookies
+        return 
 
 
 def run(server_class=HTTPServer, handler_class=HTTPHandler, host=HOST_NAME, port=PORT_NUMBER):
