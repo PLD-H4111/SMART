@@ -50,6 +50,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server):
         """ constructor """
         self.actionServlet = action_servlet.ActionServlet()
+        self.cookies = None
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
         
 
@@ -59,7 +60,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
         #self.send_response(http.client.OK)
         self.send_header('Content-type', mimetype)
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header('Set-Cookie', self.cookies.output(header=''))
+        if self.cookies != None:
+            self.send_header('Set-Cookie', self.cookies.output(header=''))
         self.end_headers()
 
 
@@ -79,6 +81,37 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     
     def do_GET(self):
+        """ method: GET """
+        print("\ndebut GET sessions", self.sessions)
+        self.do_GET_or_POST(None)
+
+    def do_POST(self):
+        """ method: POST """
+
+        print("\ndebut POST sessions", self.sessions)
+        data = self.rfile.read( int(self.headers['Content-Length']) ).decode()    
+        print(data)
+        self.do_GET_or_POST(json.loads(data))
+
+
+    def _get_user_data(self):
+        """ check if user_data in cookies, else init them """
+        user_data = None
+        print("self.cookieHeader:", self.cookieHeader)
+        print("self.cookies:", self.cookies)
+        print("sessions: ", self.sessions)
+        if (self.cookieHeader == None                   or # no cookie at all
+                "session-id" not in self.cookies        or # no session-id in the cookies
+                int(self.cookies["session-id"].value) not in self.sessions ): # wrong session-id
+            #sesskey = base64.b64encode( os.urandom(32) ) #.decode("utf8")
+            sesskey = int( random.random()*(10**10) )    # get a sess id
+            self.cookies["session-id"]    = sesskey        # set the sess id in the cookies
+        else:
+            user_data = self.sessions[ int(self.cookies["session-id"].value) ]
+        return user_data
+
+        
+    def do_GET_or_POST(self, input_data=None):
         """ """
         mimetypes = {
             '.html': "text/html",
@@ -91,14 +124,12 @@ class HTTPHandler(BaseHTTPRequestHandler):
             '.svg': "image/svg+xml",
             '.js': "application/javascript"
         }
-        print("\ndebut GET sessions", self.sessions)
+        
+        path = urllib.parse.urlparse(self.path).path
         
         # get the cookies
         self.cookieHeader   = self.headers.get('Cookie')
         self.cookies        = http.cookies.SimpleCookie( self.cookieHeader )
-        
-        path = urllib.parse.urlparse(self.path).path
-        params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
         
         ADMIN_PAGES = {"/admin.html", "/create_event.html"}
         AUTHENTICATION_PAGE = "login.html"
@@ -108,7 +139,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         user_data = self._get_user_data()
         
         if path=="/action_servlet":
-            user_data, result = self.actionServlet.fetch(user_data, params)
+            user_data, result = self.actionServlet.fetch(user_data, input_data)
             self.sessions[ int(self.cookies["session-id"].value) ] = user_data
             self.set_headers()
             #print(result)
@@ -132,7 +163,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
             if path in ADMIN_PAGES:
                 if user_data == None:
                     path = AUTHENTICATION_PAGE
-            # TODO: tester avec params
+            # TODO: tester avec input_data
             try:
                 f = open(os.curdir + os.sep + path, mode='rb')
                 #self.sessions[ int(self.cookies["session-id"].value) ] = user_data
@@ -141,57 +172,6 @@ class HTTPHandler(BaseHTTPRequestHandler):
                 f.close()
             except IOError:
                 self.send_error(404,'File Not Found: %s' % self.path)
-        return
-
-    def _get_user_data(self):
-        """ check if user_data in cookies, else init them """
-        user_data = None
-        print("self.cookieHeader:\n", self.cookieHeader)
-        print("self.cookies:\n", self.cookies)
-        print("sessions: ", self.sessions)
-        if (self.cookieHeader == None                   or # no cookie at all
-                "session-id" not in self.cookies        or # no session-id in the cookies
-                int(self.cookies["session-id"].value) not in self.sessions ): # wrong session-id
-            #sesskey = base64.b64encode( os.urandom(32) ) #.decode("utf8")
-            sesskey = int( random.random()*(10**10) )    # get a sess id
-            self.cookies["session-id"]    = sesskey        # set the sess id in the cookies
-        else:
-            user_data = self.sessions[ int(self.cookies["session-id"].value) ]
-        return user_data
-        
-        
-    def do_POST(self):
-        """ method: POST """
-        
-        """
-        # get the cookies
-        self.cookieHeader    = self.headers.get('Cookie')
-        self.cookies        = http.cookies.SimpleCookie( self.cookieHeader )
-        
-        user_data            = self._get_user_data()
-        input_data            = self.rfile.read( int(self.headers['Content-Length']) )        
-        input_data            = input_data.decode()
-        
-        user_data, json_req_result    = webApp.handle_request( user_data, input_data )
-        self.sessions[ int(self.cookies["session-id"].value) ] = user_data
-        encoded_response    = bytes( json_req_result, 'utf-8' )
-        
-        self.set_headers()
-        self.wfile.write(encoded_response)
-        """
-        
-        
-        input_data            = self.rfile.read( int(self.headers['Content-Length']) )        
-        input_data            = input_data.decode()
-        
-        print(input_data)
-        
-        encoded_response    = bytes( "bravo", 'utf-8' )
-        
-        self.set_headers()
-        self.wfile.write(encoded_response)
-
-
 
 
 def run(server_class=HTTPServer, handler_class=HTTPHandler, host=HOST_NAME, port=PORT_NUMBER):

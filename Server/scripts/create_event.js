@@ -5,9 +5,10 @@ $(document).ready(function() {
     $.ajax({
         url: "action_servlet",
         type: "post",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "get-restaurants-list"
-        },
+        }),
         dataType: "json",
         success: function(data) {
             $("#restaurants-list").empty()
@@ -38,14 +39,15 @@ function create() {
         $.ajax({
             url: "action_servlet",
             type: "post",
-            data: {
+            contentType: "application/json",
+            data: JSON.stringify({
                 "action": "create-restaurants-news",
                 "title": $("#title").val(),
                 "content": $("#content").val(),
                 "start": $("#start-date-picker").val(),
                 "end": $("#end-date-picker").val(),
                 "restaurants": get_selected_restaurants()
-            },
+            }),
             dataType: "json",
             success: function(data) {
                 redirect("admin.html");

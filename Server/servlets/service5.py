@@ -30,7 +30,7 @@ def get_restaurant_event(database, restaurant_id, date):
 
 def get_all_restaurants_news():
     """ """
-    request = "select * from Event
+    request = "select * from Event"
     mycursor = database.cursor()    
     mycursor.execute(request)
     queryResult = mycursor.fetchone()

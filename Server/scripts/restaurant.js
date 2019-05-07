@@ -12,11 +12,12 @@ function update_page(date) {
     $.ajax({
         url: "/action_servlet",
         type: "post",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "get-restaurant-details",
             "restaurants": [restaurant],
             "date": date
-        },
+        }),
         dataType: "json",
         success: function(data) {
             update_infos(data.restaurants[0]);
@@ -26,11 +27,12 @@ function update_page(date) {
     $.ajax({
         url: "/action_servlet",
         type: "post",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "get-restaurant-news",
             "restaurant": restaurant,
             "date": date
-        },
+        }),
         dataType: "json",
         success: function(data) {
             update_news(data.news);

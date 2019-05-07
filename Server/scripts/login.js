@@ -22,11 +22,12 @@ function login() {
     $.ajax({
         url: "/action_servlet",
         type: "post",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "admin-login",
             "login": login,
             "password": password
-        },
+        }),
         dataType: "json",
         success: function(data) {
             if(data.success == 1) {

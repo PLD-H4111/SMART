@@ -3,10 +3,11 @@ $(document).ready(function() {
     $.ajax({
         url: "/action_servlet",
         type: "post",
-        data: {
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "get-event-details",
             "event": id
-        },
+        }),
         dataType: "json",
         success: function(data) {
             update_event(data.event);
