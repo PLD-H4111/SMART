@@ -1,6 +1,23 @@
+$(document).ready(function(){
+    $('#input-password').keypress(function(e) {
+        if(e.keyCode==13) {
+            $('#submit-button').click();
+        }
+    });
+    $('#input-login').keypress(function(e) {
+        if(e.keyCode==13) {
+            $('#submit-button').click();
+        }
+    });
+});
+
 function login() {
     let login = $("#input-login").val();
     let password = $("#input-password").val();
+    
+    if(!login || !password) {
+        return;
+    }
     
     $.ajax({
         url: "/action_servlet",
