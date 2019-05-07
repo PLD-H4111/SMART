@@ -50,6 +50,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server):
         """ constructor """
         self.actionServlet = action_servlet.ActionServlet()
+        self.cookies = None
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
         
 
@@ -59,7 +60,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
         #self.send_response(http.client.OK)
         self.send_header('Content-type', mimetype)
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header('Set-Cookie', self.cookies.output(header=''))
+        if self.cookies != None:
+            self.send_header('Set-Cookie', self.cookies.output(header=''))
         self.end_headers()
 
 
@@ -79,7 +81,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     
     def do_GET(self):
-        """ """
+        """ method: GET """
         mimetypes = {
             '.html': "text/html",
             '.css': "text/css",
@@ -91,14 +93,12 @@ class HTTPHandler(BaseHTTPRequestHandler):
             '.svg': "image/svg+xml",
             '.js': "application/javascript"
         }
-        print("\ndebut GET sessions", self.sessions)
+        
+        path = urllib.parse.urlparse(self.path).path
         
         # get the cookies
         self.cookieHeader   = self.headers.get('Cookie')
         self.cookies        = http.cookies.SimpleCookie( self.cookieHeader )
-        
-        path = urllib.parse.urlparse(self.path).path
-        params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
         
         ADMIN_PAGES = {"/admin.html", "/create_event.html"}
         AUTHENTICATION_PAGE = "login.html"
@@ -107,47 +107,65 @@ class HTTPHandler(BaseHTTPRequestHandler):
         
         user_data = self._get_user_data()
         
+        if path == "/":
+            path = INDEX_PAGE
+                    
+        # Check file extension and set the right mime type
+        sendReply = False
+        mimetype = "text/html"
+        for extension, type in mimetypes.items():
+            if path.endswith(extension):
+                mimetype = type
+                sendReply = True
+                break
+
+        if not sendReply: # Forbidden
+            path = "error403.html"
+        print("user data avant admin pages", user_data)
+        if path in ADMIN_PAGES:
+            if user_data == None:
+                path = AUTHENTICATION_PAGE
+        # TODO: tester avec input_data
+        try:
+            f = open(os.curdir + os.sep + path, mode='rb')
+            #self.sessions[ int(self.cookies["session-id"].value) ] = user_data
+            self.set_headers(mimetype)
+            self.wfile.write(f.read())#.encode())
+            f.close()
+        except IOError:
+            self.send_error(404,'File Not Found: %s' % self.path)
+
+                
+    
+    def do_POST(self):
+        """ method: POST """
+
+        print("\ndebut POST sessions", self.sessions)
+        input_data = self.rfile.read( int(self.headers['Content-Length']) ).decode()    
+        input_data = json.loads(input_data)
+        print(input_data)
+        
+        path = urllib.parse.urlparse(self.path).path
+        
+        # get the cookies
+        self.cookieHeader   = self.headers.get('Cookie')
+        self.cookies        = http.cookies.SimpleCookie( self.cookieHeader )
+        
+        user_data = self._get_user_data()
+        
         if path=="/action_servlet":
-            user_data, result = self.actionServlet.fetch(user_data, params)
+            user_data, result = self.actionServlet.fetch(user_data, input_data)
             self.sessions[ int(self.cookies["session-id"].value) ] = user_data
             self.set_headers()
             #print(result)
             self.wfile.write(result.encode("utf8"))
-        else:
-            if path == "/":
-                path = INDEX_PAGE
-                        
-            # Check file extension and set the right mime type
-            sendReply = False
-            mimetype = "text/html"
-            for extension, type in mimetypes.items():
-                if path.endswith(extension):
-                    mimetype = type
-                    sendReply = True
-                    break
-
-            if not sendReply: # Forbidden
-                path = "error403.html"
-            print("user data avant admin pages", user_data)
-            if path in ADMIN_PAGES:
-                if user_data == None:
-                    path = AUTHENTICATION_PAGE
-            # TODO: tester avec params
-            try:
-                f = open(os.curdir + os.sep + path, mode='rb')
-                #self.sessions[ int(self.cookies["session-id"].value) ] = user_data
-                self.set_headers(mimetype)
-                self.wfile.write(f.read())#.encode())
-                f.close()
-            except IOError:
-                self.send_error(404,'File Not Found: %s' % self.path)
-        return
+        
 
     def _get_user_data(self):
         """ check if user_data in cookies, else init them """
         user_data = None
-        print("self.cookieHeader:\n", self.cookieHeader)
-        print("self.cookies:\n", self.cookies)
+        print("self.cookieHeader:", self.cookieHeader)
+        print("self.cookies:", self.cookies)
         print("sessions: ", self.sessions)
         if (self.cookieHeader == None                   or # no cookie at all
                 "session-id" not in self.cookies        or # no session-id in the cookies
@@ -158,39 +176,6 @@ class HTTPHandler(BaseHTTPRequestHandler):
         else:
             user_data = self.sessions[ int(self.cookies["session-id"].value) ]
         return user_data
-        
-        
-    def do_POST(self):
-        """ method: POST """
-        
-        """
-        # get the cookies
-        self.cookieHeader    = self.headers.get('Cookie')
-        self.cookies        = http.cookies.SimpleCookie( self.cookieHeader )
-        
-        user_data            = self._get_user_data()
-        input_data            = self.rfile.read( int(self.headers['Content-Length']) )        
-        input_data            = input_data.decode()
-        
-        user_data, json_req_result    = webApp.handle_request( user_data, input_data )
-        self.sessions[ int(self.cookies["session-id"].value) ] = user_data
-        encoded_response    = bytes( json_req_result, 'utf-8' )
-        
-        self.set_headers()
-        self.wfile.write(encoded_response)
-        """
-        
-        
-        input_data            = self.rfile.read( int(self.headers['Content-Length']) )        
-        input_data            = input_data.decode()
-        
-        print(input_data)
-        
-        encoded_response    = bytes( "bravo", 'utf-8' )
-        
-        self.set_headers()
-        self.wfile.write(encoded_response)
-
 
 
 

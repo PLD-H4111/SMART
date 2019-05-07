@@ -1,7 +1,10 @@
+#!/bin/python3
+
 import datetime
 from datetime import date
 from random import *
 import json
+import http_methods
 
 def gen_data_ir(cap,starting_time,data,max_delta):
     nb_donnees = randint(0,3)
@@ -48,6 +51,33 @@ def init_data():
                 
         elif cap.startswith("UL"):
             gen_data_ul(cap,data["begin"],data["end"],data)
+    return data
+    
+def get_data_from_bdd():
+    params = {}
+    params["action"] = "get-sensor-data"
+    params["start_date"] = datetime.datetime.now() - datetime.timedelta(days=0,seconds=30)
+    params["end_date"] = params["start_date"] + datetime.timedelta(days=0,seconds=20)
+    data_brut = http_methods.send_data(params)
+    data_brut = json.loads(data_brut)
+    data = {}
+    for donnee in data_brut["data"]:
+        if donnee["type"] == "Infrarouge":
+            pos = donnee["position"]
+            time = donnee["datetime"]
+            key = "IR"+str(pos)
+            if key not in data:
+                data[key] = {}
+            data[key][time] = donnee["measure"]
+        elif donnee["type"] == "Ultrason":
+            pos = donnee["position"]
+            time = donnee["datetime"]
+            key = "UL"+str(pos)
+            if key not in data:
+                data[key] = {}
+            data[key][time] = donnee["measure"]
+    data["begin"] = params["start_date"]
+    data["end"] = params["end_date"]
     print(data)
     return data
 
@@ -56,6 +86,13 @@ def lire_etat():
     etat = json.loads(fichier.read())
     fichier.close()
     return etat
+    
+def init_etat(data):
+    etat = {}
+    for cap in data:
+        etat[cap] = 0
+    return etat
+    
 
 def ecrire_etat(etat):
     fichier = open("etat_capteur", "w")
@@ -97,10 +134,11 @@ def lire_ordre_capteur():
     fichier.close()
     return ordre_capteurs
 
-ordre_capteurs = lire_ordre_capteur()
-data = init_data()
 
-etat = lire_etat()
+ordre_capteurs = lire_ordre_capteur()
+data = get_data_from_bdd()
+
+etat = init_etat(data)
 
 last_transition = lire_transition()
 

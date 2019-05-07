@@ -21,10 +21,11 @@ def get_data():
 def send_data(result):
 	destination_url = "http://127.0.0.1:8080/action_servlet"
 	PARAMS = {'userKey': "0"}
-	result = json.dumps(result, sort_keys=False, indent=4)
+	result = json.dumps(result, sort_keys=False, indent=4, default=str)
 	r = requests.post(url = destination_url, headers={"content-type": "application/json;charset=utf-8"}, data = result, params=PARAMS) 
-	pastebin_url = r.text 
-	print("The pastebin URL is:%s"%pastebin_url) 
+	pastebin_url = r.text
+	return pastebin_url
+	#print("The pastebin URL is:%s"%pastebin_url) 
 
 
 

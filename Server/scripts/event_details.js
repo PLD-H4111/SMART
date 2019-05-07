@@ -2,10 +2,12 @@ $(document).ready(function() {
     let id = window.location.href.substr(window.location.href.indexOf('=') + 1)
     $.ajax({
         url: "/action_servlet",
-        data: {
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "get-event-details",
             "event": id
-        },
+        }),
         dataType: "json",
         success: function(data) {
             update_event(data.event);

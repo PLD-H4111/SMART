@@ -6,13 +6,15 @@ $(document).ready(function() {
             Notification.permission = status;
         }
     });
-    
+
     restaurant_checkboxes = [];
     $.ajax({
         url: "action_servlet",
-        data: {
-            "action": "get-restaurants-list"
-        },
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify({
+            action: "get-restaurants-list"
+        }),
         dataType: "json",
         success: function(data) {
             $("#restaurants-list").empty()
@@ -42,14 +44,16 @@ function update() {
             restaurant_ids.push(id);
         }
     });
-    
+
     $.ajax({
         url: "action_servlet",
-        data: {
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "get-restaurant-details",
             "restaurants": restaurant_ids,
             "date": 0
-        },
+        }),
         dataType: "json",
         success: function(data) {
             update_chart(data.restaurants, new Date());

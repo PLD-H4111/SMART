@@ -1,9 +1,11 @@
 $(document).ready(function() {
     $.ajax({
         url: "/action_servlet",
-        data: {
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "get-all-restaurants-news"
-        },
+        }),
         dataType: "json",
         success: function(data) {
             update_news(data.news);
@@ -29,9 +31,11 @@ function update_news(news) {
 function logout() {
     $.ajax({
         url: "/action_servlet",
-        data: {
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "admin-logout"
-        }
+        })
     });
     redirect("index.html");
 }

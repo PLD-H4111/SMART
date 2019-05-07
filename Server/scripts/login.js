@@ -21,11 +21,13 @@ function login() {
     
     $.ajax({
         url: "/action_servlet",
-        data: {
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify({
             "action": "admin-login",
             "login": login,
             "password": password
-        },
+        }),
         dataType: "json",
         success: function(data) {
             if(data.success == 1) {
