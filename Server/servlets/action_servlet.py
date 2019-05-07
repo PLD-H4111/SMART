@@ -85,7 +85,7 @@ class ActionServlet:
             elif input_data["action"] == "get-event-details":
                 return user_data, service5.get_event_details(self.mydb, input_data["event"])
             elif input_data["action"] == "sensor-upload":
-                return user_data, sensor_upload.sensor_upload(self.mydb, input_data["timestamp"], input_data["sensor_id"], input_data["value"])
+                return user_data, sensor_upload.sensor_upload(self.mydb, input_data["date_time"], input_data["sensor_id"], input_data["value"])
             else:
                 json_error = '''{{
                     "error": "the action {} is not managed by the server"
