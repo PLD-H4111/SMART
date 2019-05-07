@@ -3,10 +3,10 @@ function redirect(url) {
 }
 
 function create_status(status) {
-    if(status === "open") {
+    if(status === "open" || status === 1) {
         return "<span class='status_open'>OUVERT</span>";
     }
-    if(status === "closed") {
+    if(status === "closed" || status === 0) {
         return "<span class='status_closed'>FERME</span>";
     }
 }

@@ -43,7 +43,10 @@ function update_page(date) {
 function update_infos(data) {
     $("#restaurant-name").text(data.name);
     $("#restaurant-theme").text(data.theme);
-    $("#restaurant-schedule").text(data.schedule); // array !
+    $("#restaurant-schedule").empty();
+    data.schedule.forEach(function(time) {
+        $("#restaurant-schedule").append(time + "<br/>");
+    });
     $("#restaurant-status").html(create_status(data.status));
     $("#restaurant-current-waiting-time").html(data.eta + " min");
 }
