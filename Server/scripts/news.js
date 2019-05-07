@@ -37,7 +37,7 @@ function create() {
         $.ajax({
             url: "action_servlet",
             data: {
-                "action": "create-news",
+                "action": "create-restaurants-news",
                 "title": $("#title").val(),
                 "content": $("#content").val(),
                 "start": $("#start-date-picker").val(),
@@ -64,6 +64,9 @@ function validate_input() {
     }
     if(!$("#end-date-picker").val()) {
         return {error: "La nouvelle doit avoir une date de fin"};
+    }
+    if(new Date($("#end-date-picker").val()) < new Date($("#start-date-picker").val())) {
+        return {error: "La date de fin doit être après la date de début"};
     }
     if(get_selected_restaurants().length == 0) {
         return {error: "La nouvelle doit concerner au moins un restaurant"};

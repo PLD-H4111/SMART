@@ -69,4 +69,4 @@ function create_status(status) {
         return "<span class='status_closed'>FERME</span>";
     }
 }
-    
+

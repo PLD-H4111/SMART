@@ -22,6 +22,18 @@ function update_page(date) {
             update_chart(data.restaurants, date);
         }
     });
+    $.ajax({
+        url: "/action_servlet",
+        data: {
+            "action": "get-restaurant-news",
+            "restaurant": restaurant,
+            "date": date
+        },
+        dataType: "json",
+        success: function(data) {
+            update_news(data.news);
+        }
+    });
 }
 
 function update_infos(data) {
@@ -31,6 +43,21 @@ function update_infos(data) {
     $("#restaurant-status").html(data.status);
     $("#restaurant-throughput").html(data.throughput + "pers/min");
     $("#restaurant-current-waiting-time").html(data.eta + " min");
+}
+
+function update_news(news) {
+    if(news.length < 1) {
+        return;
+    }
+    let html = '<div class="col-lg-8">';
+    news.forEach(function(item) {
+        html += '<div class="panel panel-default panel-news">';
+        html += '<div class="panel-heading">' + item.title + ' (' + item.start + ' -> ' + item.end + ')</div>';
+        html += '<div class="panel-body">' + item.content + '</div>';
+        html += '</div>';
+    });
+    html += '</div>';
+    $("#news").html(html);
 }
 
 function calendar_handler() {

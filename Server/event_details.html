@@ -12,36 +12,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://www.amcharts.com/lib/4/core.js"></script>
-    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <script src="scripts/common.js"></script>
     <script src="scripts/notifications.js"></script>
-    <script src="scripts/chart.js"></script>
-    <script src="scripts/index.js"></script>
+    <script src="scripts/event_details.js"></script>
 </head>
 
 <body>
     <div class="jumbotron text-center">
-        <h1>Oblivion</h1>
-        <p>No lollygagging !</p>
-        <button type="button" class="btn btn-primary" onclick="redirect('login.html')">Connexion administrateur</button>
+        <h1>Détails de l'évenement</h1>
     </div>
 
     <div class="container">
-        <h2>Etat de la file d'attente des restaurants</h2>
-        <table class="table">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Ouverture</th>
-                <th>Attente estimée</th>
-            </tr>
-        </thead>
-        <tbody id="restaurants-list"></tbody>
-        </table>
-        <div id="chartdiv"></div>
+        <h2 id="event-title"></h2>
+        <p id="event-content"></p>
+        <p id="event-start-date"></p>
+        <p id="event-end-date"></p>
+        <p id="event-restaurants"></p>
     </div>
+    
+    <button type="button" class="btn btn-primary" onclick="redirect('admin.html')">Retour</button>
 </body>
+
 </html>
 

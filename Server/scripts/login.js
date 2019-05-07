@@ -18,7 +18,7 @@ function login() {
                     '<div class="panel panel-danger">'
                   + '<div class="panel-heading">Erreur</div>'
                   + '<div class="panel-body">Identifiants de connexion invalides</div>'
-                  + '</div>"'
+                  + '</div>'
                 );
             }
         }
