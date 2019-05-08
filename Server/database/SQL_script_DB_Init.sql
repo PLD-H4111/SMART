@@ -1,17 +1,16 @@
--- -----------------------------------------------------
--- Schema sql7290893
--- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `sql7290893` ;
--- -----------------------------------------------------
--- Schema sql7290893
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `sql7290893` DEFAULT CHARACTER SET utf8mb4;
-USE `sql7290893` ;
+
+DROP TABLE IF EXISTS `sql7290893`.`Event` ;
+DROP TABLE IF EXISTS `sql7290893`.`RestaurantAvailabilities` ;
+DROP TABLE IF EXISTS `sql7290893`.`WaitingTime` ;
+DROP TABLE IF EXISTS `sql7290893`.`Measure` ;
+DROP TABLE IF EXISTS `sql7290893`.`Sensor` ;
+DROP TABLE IF EXISTS `sql7290893`.`SensorType` ;
+DROP TABLE IF EXISTS `sql7290893`.`Restaurant` ;
+DROP TABLE IF EXISTS `sql7290893`.`User` ;
 
 -- -----------------------------------------------------
 -- Table `sql7290893`.`Restaurant`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`Restaurant` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`Restaurant` (
   `PK_idRestaurant` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -25,7 +24,6 @@ AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Table `sql7290893`.`Event`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`Event` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`Event` (
   `PK_idEvent` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -48,7 +46,6 @@ AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Table `sql7290893`.`SensorType`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`SensorType` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`SensorType` (
   `PK_idSensorType` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -62,7 +59,6 @@ AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Table `sql7290893`.`Sensor`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`Sensor` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`Sensor` (
   `PK_idSensor` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -88,7 +84,6 @@ AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Table `sql7290893`.`Measure`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`Measure` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`Measure` (
   `PK_idMeasure` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -108,7 +103,6 @@ AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Table `sql7290893`.`RestaurantAvailabilities`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`RestaurantAvailabilities` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`RestaurantAvailabilities` (
   `PK_idRestaurantAvailabilities` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -129,7 +123,6 @@ AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Table `sql7290893`.`WaitingTime`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`WaitingTime` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`WaitingTime` (
   `PK_idWaitingTime` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -149,7 +142,6 @@ AUTO_INCREMENT = 1;
 -- -----------------------------------------------------
 -- Table `sql7290893`.`User`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `sql7290893`.`User` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`User` (
   `PK_idUser` INT NOT NULL AUTO_INCREMENT,
