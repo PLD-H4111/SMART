@@ -55,36 +55,34 @@ def get_restaurant_details(restaurant_id, date):
         availabilities_tuples = dao.select_restaurant_availabilities(restaurant_id, date)
         if availabilities_tuples != None:
             for tuple in availabilities_tuples:
-                print(tuple)
-                schedule.append("{}h-{}h".format(tuple[2].seconds//3600, tuple[3].seconds//3600))
-            # "schedule": ["12h-14h", "18h-20h"],
+                schedule.append("{}h{}-{}h{}".format(str(tuple[2].seconds//3600).zfill(2),
+                                             str(tuple[2].seconds%60).zfill(2),
+                                             str(tuple[3].seconds//3600).zfill(2),
+                                             str(tuple[3].seconds%60).zfill(2)))
         else:
             pass
         
         waiting_time_tuples = dao.select_waiting_times(restaurant_id, date)
         if waiting_time_tuples != None:
             for tuple in waiting_time_tuples:
-                data.append({"date": tuple[2].strftime("%Y-%m-%d"),
-                             "realtime": tuple[3]})
+                print("data68", data)
+                data.append({"date": tuple[2].strftime("%H:%M:%S"),
+                             "realtime": tuple[1]})
         else:
             pass
         
+        schedule = '["' + '", "'.join(schedule) + '"]'
         
         json_result = '''{{
             "id": {},
             "name": "{}",
             "theme": "{}",
             "status": {},
-            "schedule": ["12h-14h", "18h-20h"],
+            "schedule": {},
             "throughput": "8p/min",
             "eta": "{}",
-            "data": [
-                    {{"date": "08:15:30", "realtime": 5}},
-                    {{"date": "09:15:40", "realtime": 10}},
-                    {{"date": "10:15:50", "predicted": 20}},
-                    {{"date": "11:16:00", "predicted": 50}}
-            ]
-        }}'''.format(id, name, theme, availability, waitingTime)
+            "data": {}
+        }}'''.format(id, name, theme, availability, schedule, waitingTime, json.dumps(data))
         return json_result
     else:
         json_error = '''{
@@ -92,46 +90,6 @@ def get_restaurant_details(restaurant_id, date):
         }'''
         return json_error
 
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-def get_restaurant_details0(database, restaurant_id, date):
-    """ """
-
-    request = "select * from Restaurant where PK_idRestaurant = " + str(restaurant_id)
-    mycursor = database.cursor()
-    
-    mycursor.execute(request)
-    queryResult = mycursor.fetchone()
-    
-    json_result = ""
-    if queryResult != None:    
-        json_result = '''{{
-            "name": "{}",
-            "theme": "{}",
-            "status": "open",
-            "schedule": ["12h-14h", "18h-20h"],
-            "throughput": "8p/min",
-            "eta": 15,
-            "data": [
-                    {{"date": "08:15:30", "realtime": 5}},
-                    {{"date": "09:15:40", "realtime": 10}},
-                    {{"date": "10:15:50", "predicted": 20}},
-                    {{"date": "11:16:00", "predicted": 50}}
-            ]
-        }}'''.format(queryResult[1], queryResult[2])
-    else:
-        json_result = '''{
-            "error": "the restaurant ID doesn't exist in the database."
-        }'''
-    return json_result
 
     
     

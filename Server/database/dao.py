@@ -72,5 +72,9 @@ def select_waiting_times(restaurant_id, date):
     
 #print( select_actual_restaurant_availability(11) )
 #print( select_last_waiting_time(1) )
-#print(select_restaurant_availabilities(1, "2019-05-02"))
+#print(select_restaurant_availabilities(1, "2019-05-08"))
 #print(select_waiting_times(1, '2019-05-02'))
+
+
+
+

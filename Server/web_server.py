@@ -217,6 +217,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
                 self.wfile.write(result.encode("utf8"))
             except Exception as ex:
                 self.send_error(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal Server Error")
+                raise ex
 
 
     def _get_user_data(self, cookieHeader, cookies):
