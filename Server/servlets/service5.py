@@ -1,11 +1,18 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import json
+from importlib import reload
+import sys
+sys.path.insert(0, './database/')
+reload(sys)
 
-def get_restaurant_event(database, restaurant_id, date):
+import json
+import dao
+
+
+
+def get_restaurant_events(database, restaurant_id, date):
     """ """
-    
     request = "select name, eventDescription, beginningDate, endingDate from Event where FK_Restaurant = " + restaurant_id
     mycursor = database.cursor()    
     mycursor.execute(request)
@@ -32,12 +39,13 @@ def get_restaurant_event(database, restaurant_id, date):
         
     return json_result;
 
-def get_all_restaurants_events(database):
+
+    
+    
+
+def get_all_restaurants_events():
     """ """
-    request = "select PK_idEvent, Event.name, beginningDate, endingDate, Restaurant.name from Event, Restaurant where Restaurant.PK_idRestaurant = Event.FK_Restaurant"
-    mycursor = database.cursor()    
-    mycursor.execute(request)
-    result = mycursor.fetchall()
+    result = dao.select_restaurants_events()
     
     if result != None:
         json_result = """{ "events": ["""
@@ -62,12 +70,9 @@ def get_all_restaurants_events(database):
     return json_result;
 
 
-def get_event_details(database, event_id):
-    """ """       
-    request = "select Event.name, eventDescription, beginningDate, endingDate, Restaurant.name from Event, Restaurant where Restaurant.PK_idRestaurant = Event.FK_Restaurant and PK_idEvent = " + event_id
-    mycursor = database.cursor()    
-    mycursor.execute(request)
-    result = mycursor.fetchall()
+def get_event_details(event_id):
+    """ """
+    result = dao.select_event_details(event_id)
 
     json_result = ""
     if result != None:
@@ -86,4 +91,33 @@ def get_event_details(database, event_id):
         }'''
     return json_result;
 
-  
+ 
+ 
+ 
+ 
+ 
+ 
+def get_restaurant_event0s(restaurant_id, date):
+    """ """
+    result = dao.select_restaurant_events(restaurant_id, date)
+    
+    if result != None:
+        json_result = """{ "events": ["""
+        for index in range(len(result)):
+            json_result += '''{{
+                "name": "{}",
+                "content": "{}",
+                "start": "{}",
+                "end": "{}"
+            }}{}'''.format(result[index][0],
+                           result[index][1],
+                           result[index][2],
+                           result[index][3],
+                           "" if index == len(result)-1 else ",")
+        json_result += """ ] } """
+    else:
+        json_result = '''{
+            "error": "Events for this restaurant doesn't exist in the database."
+        }'''
+        
+    return json_result;

@@ -14,18 +14,19 @@ import dao
 
 def login_admin(user_data, username, passwd):
     """ """
+    admin = dao.select_admin(username, passwd)
     json_result = ""
-    if username == "1" and passwd == "2":
+    if admin != None:
         user_data = {
-            "id": 42
+            "id": admin[0]
         }
         json_result = """{
-            "authentification": "success",
+            "authentication": "success",
             "success": 1
         }"""
     else:
         json_result = """{
-            "authentification": "failure",
+            "authentication": "failure",
             "success": 0
         }"""
     return user_data, json_result
