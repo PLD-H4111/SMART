@@ -34,7 +34,7 @@ function login() {
                 window.location.href = "admin.html";
             } else {
                 $("#feedback").html(
-                    '<div class="card border-danger">'
+                    '<div class="card border-danger mb-2">'
                   + '<div class="card-header bg-danger text-white">Erreur</div>'
                   + '<div class="card-body">Identifiants de connexion invalides</div>'
                   + '</div>'
