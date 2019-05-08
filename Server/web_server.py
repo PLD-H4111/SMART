@@ -173,8 +173,9 @@ class HTTPHandler(BaseHTTPRequestHandler):
             self.send_response(HTTPStatus.OK)
             self.send_header("Content-type", mimetype)
             self.send_header("Content-Length", str(fs[6]))
-            self.send_header("Last-Modified",
-                self.date_time_string(fs.st_mtime))
+            self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
+            if cookies != None:
+                self.send_header('Set-Cookie', cookies.output(header=''))
             self.end_headers()
             return f
         except:
