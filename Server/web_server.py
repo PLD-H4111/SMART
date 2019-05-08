@@ -36,6 +36,7 @@ PORT_NUMBER = 80
 # TODO: fix sessions with posts
 # TODO: error403 must send 403 code
 # TODO: créer une session seulement si on en a besoin
+# TODO: gérer la deconnexion et mieux gérer les cas limites de reconnexion
 
 
 
@@ -98,7 +99,6 @@ class HTTPHandler(BaseHTTPRequestHandler):
         }
         
         path = urllib.parse.urlparse(self.path).path
-        
         
         # get the cookies
         cookieHeader   = self.headers.get('Cookie')
@@ -178,10 +178,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
                 user_data = self.sessions[int(cookies["session-id"].value)]
             else:
                 del cookies["session-id"]
-                
         return user_data
 
     def _create_session(self, user_data, cookies):
+        """ """
         #sesskey = base64.b64encode( os.urandom(32) ) #.decode("utf8")
         sesskey = int( random.random()*(10**10) )     # get a sess id
         cookies["session-id"] = sesskey               # set the sess id in the cookies
