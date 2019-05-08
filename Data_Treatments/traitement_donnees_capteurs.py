@@ -156,6 +156,11 @@ def ecrire_ordre_capteur(ordre_capteurs):
     fichier = open("ordre_capteurs_file", "w")
     fichier.write(json.dumps(ordre_capteurs))
     fichier.close()
+    
+def ecrire_timestamp(timestamp):
+    fichier = open("timestamp", "w")
+    fichier.write(json.dumps(timestamp, default=str))
+    fichier.close()
 
 # A n'utiliser que lors d'un changement de capteurs :
 #ordre_capteurs = get_sensor_list_from_bdd()
@@ -164,7 +169,6 @@ def ecrire_ordre_capteur(ordre_capteurs):
 ordre_capteurs = lire_ordre_capteur()
 
 data = get_data_from_bdd()
-print(data)
 
 etat = init_etat(ordre_capteurs)
 
@@ -176,8 +180,10 @@ delta = datetime.timedelta(days=0,seconds=10)
 
 now = datetime.datetime.now()
 
-debut_inter = data["begin"] #a modifier pour le reel
-fin_inter = data["end"] #a modifier pour le reel
+debut_inter = data["begin"]
+fin_inter = data["end"]
+
+ecrire_timestamp(fin_inter)
 
 time_format = "%Y-%m-%d %H:%M:%S.%f"
 

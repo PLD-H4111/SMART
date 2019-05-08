@@ -13,6 +13,7 @@ import service5
 import sensor_upload
 import service_get_data_sensors
 import service_get_sensor_list
+import service_upload_waiting_time
 
 
 # TODO: verifier l'authentification pour les services sensibles
@@ -106,6 +107,24 @@ class ActionServlet:
                     return user_data, service_get_data_sensors.get_data_from_sensors(self.mydb, input_data["start_date"], input_data["end_date"])
             elif input_data["action"] == "get-sensor-list":
                 return user_data, service_get_sensor_list.get_sensor_list(self.mydb)
+            elif input_data["action"] == "upload-waiting-time":
+                if "waiting_time" not in input_data:
+                    json_error = '''{
+                        "error": "there's no 'waiting_time' parameter in the parameters passed as input"
+                    }'''
+                    return user_data, json_error
+                elif "timestamp" not in input_data:
+                    json_error = '''{
+                        "error": "there's no 'timestamp' parameter in the parameters passed as input"
+                    }'''
+                    return user_data, json_error
+                elif "restaurant" not in input_data:
+                    json_error = '''{
+                        "error": "there's no 'restaurant' parameter in the parameters passed as input"
+                    }'''
+                    return user_data, json_error
+                else:
+                    return user_data, service_upload_waiting_time.upload_waiting_time(self.mydb, input_data["waiting_time"], input_data["timestamp"], input_data["restaurant"])
             else:
                 json_error = '''{{
                     "error": "the action {} is not managed by the server"

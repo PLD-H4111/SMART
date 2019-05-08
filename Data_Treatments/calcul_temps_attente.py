@@ -1,4 +1,5 @@
 import json
+import http_methods
 
 def lire_etat():
     fichier = open("etat_capteur", "r")
@@ -25,6 +26,20 @@ def lire_nb_personnes_capteur():
     nb_personnes_capteurs = json.loads(fichier.read())
     fichier.close()
     return nb_personnes_capteurs
+
+def lire_distance_timstamp():
+    fichier = open("timestamp", "r")
+    timestamp = json.loads(fichier.read())
+    fichier.close()
+    return timestamp
+    
+def send_waiting_time(waiting_time,timsetamp,restaurant):
+    params = {}
+    params["action"] = "upload-waiting-time"
+    params["waiting_time"] = waiting_time
+    params["timestamp"] = timsetamp
+    params["restaurant"] = restaurant
+    http_methods.send_data(params)
 
 etat = lire_etat()
 distances_max = lire_distance_max_ul()
@@ -62,5 +77,10 @@ if i > 0 and i < len(ordre_capteurs):
         estim_approx = estim_nb_personnes[ordre_capteurs[i]]
         estim_reelle = estim_prec + (estim_approx - estim_prec)*etat[ordre_capteurs[i]]
         nbPersonnes = int(estim_reelle)
-print("Estimation temps attente : {} minutes".format(nbPersonnes/debit))
+waiting_time = nbPersonnes/debit
+timestamp = lire_distance_timstamp()
+restaurant = 8
+send_waiting_time(waiting_time,timestamp,restaurant)
+
+print("Estimation temps attente : {} minutes".format(waiting_time))
         
