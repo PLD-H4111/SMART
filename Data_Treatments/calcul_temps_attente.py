@@ -56,7 +56,7 @@ nbPersonnes = 0
 while (i < len(ordre_capteurs) and detection_file[ordre_capteurs[i]] == 1):
     nbPersonnes = estim_nb_personnes[ordre_capteurs[i]]
     i = i+1
-if i > 0:
+if i > 0 and i < len(ordre_capteurs):
     if ordre_capteurs[i-1].startswith("UL"):
         estim_prec = estim_nb_personnes[ordre_capteurs[i-1]]
         estim_approx = estim_nb_personnes[ordre_capteurs[i]]
