@@ -14,8 +14,8 @@ DROP TABLE IF EXISTS `sql7290893`.`User` ;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`Restaurant` (
   `PK_idRestaurant` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `theme` VARCHAR(45) NULL DEFAULT NULL,
+  `name` TEXT NOT NULL,
+  `theme` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`PK_idRestaurant`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
@@ -27,11 +27,11 @@ AUTO_INCREMENT = 1;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`Event` (
   `PK_idEvent` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
+  `name` TEXT NOT NULL,
   `beginningDate` DATE NOT NULL,
   `endingDate` DATE NOT NULL,
   `FK_restaurant` INT(10) UNSIGNED NULL,
-  `eventDescription` VARCHAR(200) NULL,
+  `eventDescription` TEXT NULL,
   PRIMARY KEY (`PK_idEvent`),
   INDEX `fk_restaurant_event_idx` (`FK_restaurant` ASC),
   CONSTRAINT `fk_restaurant_event`
@@ -49,8 +49,8 @@ AUTO_INCREMENT = 1;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`SensorType` (
   `PK_idSensorType` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(45) NOT NULL,
-  `unit` VARCHAR(10) NOT NULL,
+  `type` TEXT NOT NULL,
+  `unit` TEXT NOT NULL,
   PRIMARY KEY (`PK_idSensorType`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
@@ -63,7 +63,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE IF NOT EXISTS `sql7290893`.`Sensor` (
   `PK_idSensor` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `position` INT(10) UNSIGNED NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
+  `name` TEXT NOT NULL,
   `FK_restaurant` INT(10) UNSIGNED NOT NULL,
   `FK_sensorType` INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`PK_idSensor`),
@@ -145,8 +145,8 @@ AUTO_INCREMENT = 1;
 
 CREATE TABLE IF NOT EXISTS `sql7290893`.`User` (
   `PK_idUser` INT NOT NULL AUTO_INCREMENT,
-  `identifiant` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
+  `identifiant` TEXT NOT NULL,
+  `password` TEXT NOT NULL,
   PRIMARY KEY (`PK_idUser`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
