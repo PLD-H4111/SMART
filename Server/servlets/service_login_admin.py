@@ -2,11 +2,17 @@
 # -*- coding: utf-8 -*-
 
 
+from importlib import reload
+import sys
+sys.path.insert(0, './database/')
+reload(sys)
+
 import json
+import dao
 
 
 
-def login(database, user_data, username, passwd):
+def login_admin(user_data, username, passwd):
     """ """
     json_result = ""
     if username == "1" and passwd == "2":

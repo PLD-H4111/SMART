@@ -5,9 +5,11 @@
 import json
 import mysql.connector
 
-import service1
-import service2
-import service3
+from service_get_restaurants import get_restaurants
+from service_get_restaurants_details import get_restaurants_details
+
+from service_login_admin import login_admin
+
 import service4
 import service5
 import sensor_upload
@@ -41,7 +43,6 @@ class ActionServlet:
         print("input data", input_data)
         print("action servlet:", input_data["action"])
         
-        
         if "action" not in input_data:
             json_error = '''{
                 "error": "there's no 'action' parameter in the parameters passed as input"
@@ -49,7 +50,7 @@ class ActionServlet:
             return user_data, json_error
         else:
             if input_data["action"] == "get-restaurants-list":    
-                return user_data, service1.get_restaurants(self.mydb)
+                return user_data, get_restaurants()
             elif input_data["action"] == "get-restaurant-details":
                 if "restaurants" not in input_data:
                     json_error = '''{
@@ -62,7 +63,7 @@ class ActionServlet:
                     }'''
                     return user_data, json_error
                 else:
-                    return user_data, service2.get_restaurants_details(self.mydb, input_data["restaurants"], input_data["date"])
+                    return user_data, get_restaurants_details(input_data["restaurants"], input_data["date"])
             elif input_data["action"] == "admin-login":
                 if "login" not in input_data:
                     json_error = '''{
@@ -75,7 +76,7 @@ class ActionServlet:
                     }'''
                     return user_data, json_error
                 else:
-                    return service3.login(self.mydb, user_data, input_data["login"], input_data["password"])
+                    return login_admin(user_data, input_data["login"], input_data["password"])
             elif input_data["action"] == "create-restaurants-events":
                 print(input_data)
                 return user_data, service4.create_restaurants_event(self.mydb,

@@ -24,28 +24,7 @@ import dao
     }'''
 
     
-def extract_waiting_time(waiting_time_tuple):
-    """ extract waiting time from a tuple of the WaitingTime table """
-    waitingTime = ""
-    if waiting_time_tuple != None:
-        #print("WTT 196", waiting_time_tuple)
-        #print(waiting_time_tuple[2])
-        a = waiting_time_tuple[2]
-        b = datetime.now()
-        #b = datetime(2019,5,2,12,10)
-        c = b - a
-        delta = timedelta(0, 600, 0) # 10 minutes
-        if b >= a and c < delta:
-            waitingTime = str(waiting_time_tuple[1])
-        else:
-            waitingTime = "N/A"
-    else:
-        waitingTime = "N/A"
-    return waitingTime
-
-
-
-def get_restaurants(database):
+def get_restaurants():
     """ """
     json_result = """{"restaurants": ["""
     
@@ -79,4 +58,25 @@ def get_restaurants(database):
             json_result += ",\n"
     json_result += """ ] } """
     return json_result
+    
+    
+def extract_waiting_time(waiting_time_tuple):
+    """ extract waiting time from a tuple of the WaitingTime table """
+    waitingTime = ""
+    if waiting_time_tuple != None:
+        #print("WTT 196", waiting_time_tuple)
+        #print(waiting_time_tuple[2])
+        a = waiting_time_tuple[2]
+        b = datetime.now()
+        #b = datetime(2019,5,2,12,10)
+        c = b - a
+        delta = timedelta(0, 600, 0) # 10 minutes
+        if b >= a and c < delta:
+            waitingTime = str(waiting_time_tuple[1])
+        else:
+            waitingTime = "N/A"
+    else:
+        waitingTime = "N/A"
+    return waitingTime
+
     
