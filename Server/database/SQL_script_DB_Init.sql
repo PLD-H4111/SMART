@@ -1,18 +1,21 @@
 
-DROP TABLE IF EXISTS `sql7290893`.`Event` ;
-DROP TABLE IF EXISTS `sql7290893`.`RestaurantAvailabilities` ;
-DROP TABLE IF EXISTS `sql7290893`.`WaitingTime` ;
-DROP TABLE IF EXISTS `sql7290893`.`Measure` ;
-DROP TABLE IF EXISTS `sql7290893`.`Sensor` ;
-DROP TABLE IF EXISTS `sql7290893`.`SensorType` ;
-DROP TABLE IF EXISTS `sql7290893`.`Restaurant` ;
-DROP TABLE IF EXISTS `sql7290893`.`User` ;
+USE `sql7291089`;
+
+
+DROP TABLE IF EXISTS `Event` ;
+DROP TABLE IF EXISTS `RestaurantAvailabilities` ;
+DROP TABLE IF EXISTS `WaitingTime` ;
+DROP TABLE IF EXISTS `Measure` ;
+DROP TABLE IF EXISTS `Sensor` ;
+DROP TABLE IF EXISTS `SensorType` ;
+DROP TABLE IF EXISTS `Restaurant` ;
+DROP TABLE IF EXISTS `Admin` ;
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`Restaurant`
+-- Table `Restaurant`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`Restaurant` (
+CREATE TABLE IF NOT EXISTS `Restaurant` (
   `PK_idRestaurant` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` TEXT NOT NULL,
   `theme` TEXT NULL DEFAULT NULL,
@@ -22,10 +25,10 @@ AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`Event`
+-- Table `Event`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`Event` (
+CREATE TABLE IF NOT EXISTS `Event` (
   `PK_idEvent` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` TEXT NOT NULL,
   `beginningDate` DATE NOT NULL,
@@ -36,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `sql7290893`.`Event` (
   INDEX `fk_restaurant_event_idx` (`FK_restaurant` ASC),
   CONSTRAINT `fk_restaurant_event`
     FOREIGN KEY (`FK_restaurant`)
-    REFERENCES `sql7290893`.`Restaurant` (`PK_idRestaurant`)
+    REFERENCES `Restaurant` (`PK_idRestaurant`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -44,10 +47,10 @@ AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`SensorType`
+-- Table `SensorType`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`SensorType` (
+CREATE TABLE IF NOT EXISTS `SensorType` (
   `PK_idSensorType` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `type` TEXT NOT NULL,
   `unit` TEXT NOT NULL,
@@ -57,10 +60,10 @@ AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`Sensor`
+-- Table `Sensor`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`Sensor` (
+CREATE TABLE IF NOT EXISTS `Sensor` (
   `PK_idSensor` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `position` INT(10) UNSIGNED NOT NULL,
   `name` TEXT NOT NULL,
@@ -71,21 +74,21 @@ CREATE TABLE IF NOT EXISTS `sql7290893`.`Sensor` (
   INDEX `FK_sensorType_idx` (`FK_sensorType` ASC),
   CONSTRAINT `FK_restaurant_sensor`
     FOREIGN KEY (`FK_restaurant`)
-    REFERENCES `sql7290893`.`Restaurant` (`PK_idRestaurant`)
+    REFERENCES `Restaurant` (`PK_idRestaurant`)
     ON UPDATE CASCADE,
   CONSTRAINT `FK_sensorType`
     FOREIGN KEY (`FK_sensorType`)
-    REFERENCES `sql7290893`.`SensorType` (`PK_idSensorType`)
+    REFERENCES `SensorType` (`PK_idSensorType`)
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`Measure`
+-- Table `Measure`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`Measure` (
+CREATE TABLE IF NOT EXISTS `Measure` (
   `PK_idMeasure` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `dateTime` DATETIME NOT NULL,
   `measure` DECIMAL(10,0) NOT NULL,
@@ -94,17 +97,17 @@ CREATE TABLE IF NOT EXISTS `sql7290893`.`Measure` (
   INDEX `fk_Sensor_idx` (`FK_sensor` ASC),
   CONSTRAINT `fk_Sensor`
     FOREIGN KEY (`FK_sensor`)
-    REFERENCES `sql7290893`.`Sensor` (`PK_idSensor`)
+    REFERENCES `Sensor` (`PK_idSensor`)
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`RestaurantAvailabilities`
+-- Table `RestaurantAvailabilities`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`RestaurantAvailabilities` (
+CREATE TABLE IF NOT EXISTS `RestaurantAvailabilities` (
   `PK_idRestaurantAvailabilities` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `date` DATE NOT NULL,
   `openingTime` TIME NOT NULL,
@@ -114,17 +117,17 @@ CREATE TABLE IF NOT EXISTS `sql7290893`.`RestaurantAvailabilities` (
   INDEX `fk_Restaurant_idx` (`FK_restaurant` ASC),
   CONSTRAINT `fk_Restaurant_Availability`
     FOREIGN KEY (`FK_restaurant`)
-    REFERENCES `sql7290893`.`Restaurant` (`PK_idRestaurant`)
+    REFERENCES `Restaurant` (`PK_idRestaurant`)
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`WaitingTime`
+-- Table `WaitingTime`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`WaitingTime` (
+CREATE TABLE IF NOT EXISTS `WaitingTime` (
   `PK_idWaitingTime` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `waitingTime` INT(10) UNSIGNED NOT NULL,
   `date` DATETIME NOT NULL,
@@ -133,20 +136,20 @@ CREATE TABLE IF NOT EXISTS `sql7290893`.`WaitingTime` (
   INDEX `FK_restaurant_idx` (`FK_restaurant` ASC),
   CONSTRAINT `FK_restaurant_waitingTime`
     FOREIGN KEY (`FK_restaurant`)
-    REFERENCES `sql7290893`.`Restaurant` (`PK_idRestaurant`)
+    REFERENCES `Restaurant` (`PK_idRestaurant`)
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
--- Table `sql7290893`.`User`
+-- Table `Admin`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `sql7290893`.`User` (
-  `PK_idUser` INT NOT NULL AUTO_INCREMENT,
-  `identifiant` TEXT NOT NULL,
+CREATE TABLE IF NOT EXISTS `Admin` (
+  `PK_idAdmin` INT NOT NULL AUTO_INCREMENT,
+  `login` TEXT NOT NULL,
   `password` TEXT NOT NULL,
-  PRIMARY KEY (`PK_idUser`))
+  PRIMARY KEY (`PK_idAdmin`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
