@@ -55,6 +55,12 @@ def init_data():
     
 def get_data_from_bdd():
     params = {}
+    params["action"] = "get-sensor-list"
+    sensor_list_brut = http_methods.send_data(params)
+    sensor_list = json.loads(sensor_list_brut)
+    print(sensor_list)
+    
+    params = {}
     params["action"] = "get-sensor-data"
     params["start_date"] = datetime.datetime.now() - datetime.timedelta(days=0,seconds=30)
     params["end_date"] = params["start_date"] + datetime.timedelta(days=0,seconds=20)
@@ -78,7 +84,7 @@ def get_data_from_bdd():
             data[key][time] = donnee["measure"]
     data["begin"] = params["start_date"]
     data["end"] = params["end_date"]
-    print(data)
+    #print(data)
     return data
 
 def lire_etat():

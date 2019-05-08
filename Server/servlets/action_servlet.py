@@ -12,6 +12,7 @@ import service4
 import service5
 import sensor_upload
 import service_get_data_sensors
+import service_get_sensor_list
 
 
 # TODO: verifier l'authentification pour les services sensibles
@@ -103,6 +104,8 @@ class ActionServlet:
                     return user_data, json_error
                 else:
                     return user_data, service_get_data_sensors.get_data_from_sensors(self.mydb, input_data["start_date"], input_data["end_date"])
+            elif input_data["action"] == "get-sensor-list":
+                return user_data, service_get_sensor_list.get_sensor_list(self.mydb)
             else:
                 json_error = '''{{
                     "error": "the action {} is not managed by the server"
