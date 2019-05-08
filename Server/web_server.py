@@ -104,7 +104,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         cookieHeader   = self.headers.get('Cookie')
         cookies        = http.cookies.SimpleCookie(cookieHeader)
         
-        ADMIN_PAGES = {"/admin.html", "/create_event.html"}
+        ADMIN_PAGES = {"/admin.html", "/create_event.html", "/event_details.html"}
         AUTHENTICATION_PAGE = "login.html"
         MAIN_ADMIN_PAGE = "admin.html"
         INDEX_PAGE = "index.html"

@@ -18,6 +18,14 @@ def select_all_restaurants():
     cursor.execute(request)
     result = cursor.fetchall()
     return result
+    
+def select_restaurant(restaurant_id):
+    request = "select * from Restaurant where PK_idRestaurant=" + str(restaurant_id) + ";"
+    cursor = database_connector.cursor()
+    cursor.execute(request)
+    result = cursor.fetchone()
+    return result
+
 
 def select_last_waiting_time(restaurant_id):
     request = "select * from WaitingTime where FK_restaurant=" + str(restaurant_id) + " ORDER BY date DESC LIMIT 1;"
