@@ -3,14 +3,26 @@
 
 
 import mysql.connector
-    
+
+
+
+"""database_connector = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="toorTOOR2019!",
+    database="main"
+)"""
+
+
 database_connector = mysql.connector.connect(
     host="sql7.freemysqlhosting.net",
-    user="sql7290893",
-    passwd="bwykkiQ1WX",
-    database="sql7290893",
+    user="sql7291089",
+    passwd="bbf4tfEUn1",
+    database="sql7291089",
     use_pure=True
 )
+
+
 
 def select_all_restaurants():
     request = "select * from Restaurant;"
@@ -40,10 +52,25 @@ def select_actual_restaurant_availability(restaurant_id):
     cursor.execute(request)
     result = cursor.fetchone()
     return result
-    
+
+
+def select_restaurant_availabilities(restaurant_id, date):
+    request = "select * from RestaurantAvailabilities where FK_restaurant=" + str(restaurant_id) + " and Date(date) = '" + date + "';"
+    cursor = database_connector.cursor()
+    cursor.execute(request)
+    result = cursor.fetchall()
+    return result
+
+
+def select_waiting_times(restaurant_id, date):
+    request = "select * from WaitingTime where FK_restaurant=" + str(restaurant_id) + " and Date(date) = '" + date + "';"
+    cursor = database_connector.cursor()
+    cursor.execute(request)
+    result = cursor.fetchall()
+    return result
     
     
 #print( select_actual_restaurant_availability(11) )
 #print( select_last_waiting_time(1) )
-
-  
+#print(select_restaurant_availabilities(1, "2019-05-02"))
+#print(select_waiting_times(1, '2019-05-02'))

@@ -13,11 +13,13 @@ import dao
 
 
 # TODO: change date to time in json data
+# TODO: changer le format horaires dans json result
 
 
 
-def get_restaurants_details(restaurants_ids, date):
+def get_restaurants_details(restaurants_ids, date_time):
     """ get the details of all the restaurants """
+    date = date_time[:10]
     json_result = """{ "restaurants": ["""
     for i, restaurant_id in enumerate(restaurants_ids):
         json_result += get_restaurant_details(restaurant_id, date)
@@ -26,10 +28,12 @@ def get_restaurants_details(restaurants_ids, date):
     json_result += """ ] } """
     return json_result
     
-    
+
+
 def get_restaurant_details(restaurant_id, date):
     """ get the details of a single restaurant """
     restaurant = dao.select_restaurant(restaurant_id)
+    
     if restaurant != None:
         id = restaurant[0]
         name = restaurant[1]
@@ -39,16 +43,32 @@ def get_restaurant_details(restaurant_id, date):
         waitingTime = ""
         data = []
         
-        
         waiting_time_tuple = dao.select_last_waiting_time(id)
-        availability_tuple = dao.select_actual_restaurant_availability(id)
-        
         waitingTime = extract_waiting_time(waiting_time_tuple)
         
+        availability_tuple = dao.select_actual_restaurant_availability(id)
         if availability_tuple != None:
             availability = 1
         else:
             availability = 0
+        
+        availabilities_tuples = dao.select_restaurant_availabilities(restaurant_id, date)
+        if availabilities_tuples != None:
+            for tuple in availabilities_tuples:
+                print(tuple)
+                schedule.append("{}h-{}h".format(tuple[2].seconds//3600, tuple[3].seconds//3600))
+            # "schedule": ["12h-14h", "18h-20h"],
+        else:
+            pass
+        
+        waiting_time_tuples = dao.select_waiting_times(restaurant_id, date)
+        if waiting_time_tuples != None:
+            for tuple in waiting_time_tuples:
+                data.append({"date": tuple[2].strftime("%Y-%m-%d"),
+                             "realtime": tuple[3]})
+        else:
+            pass
+        
         
         json_result = '''{{
             "id": {},

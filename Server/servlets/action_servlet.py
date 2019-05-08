@@ -21,22 +21,24 @@ import service_upload_waiting_time
 # TODO: verifier l'authentification pour les services sensibles
 # i.e user_data == None
 
+# TODO: change date to datetime in json
+
 
 class ActionServlet:
     def __init__(self):
+        self.mydb = mysql.connector.connect(
+            host="sql7.freemysqlhosting.net",
+            user="sql7291089",
+            passwd="bbf4tfEUn1",
+            database="sql7291089",
+            use_pure=True
+        )
         """self.mydb = mysql.connector.connect(
             host="localhost",
             user="root",
             passwd="toorTOOR2019!",
             database="main"
         )"""
-        self.mydb = mysql.connector.connect(
-            host="sql7.freemysqlhosting.net",
-            user="sql7290893",
-            passwd="bwykkiQ1WX",
-            database="sql7290893",
-            use_pure=True
-        )
     
     def fetch(self, user_data, input_data):
         """ """

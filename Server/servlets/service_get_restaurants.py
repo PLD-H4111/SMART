@@ -40,10 +40,9 @@ def get_restaurants():
         availability = ""
         
         waiting_time_tuple = dao.select_last_waiting_time(id)
-        availability_tuple = dao.select_actual_restaurant_availability(id)
-        
         waitingTime = extract_waiting_time(waiting_time_tuple)
         
+        availability_tuple = dao.select_actual_restaurant_availability(id)
         if availability_tuple != None:
             availability = 1
         else:
