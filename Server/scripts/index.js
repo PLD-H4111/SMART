@@ -27,7 +27,7 @@ $(document).ready(function() {
                     +   "<a href='restaurant.html?id=" + restaurants[i].id + "'>" + restaurants[i].name + "</a>"
                     + "</td>"
                     + "<td>" + create_status(restaurants[i].status) + "</td>"
-                    + "<td>" + restaurants[i].eta + " min</td>"
+                    + "<td>" + create_eta(restaurants[i].eta) + "</td>"
                     + "</tr>"
                 );
                 restaurant_checkboxes.push(restaurants[i].id);

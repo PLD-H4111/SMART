@@ -48,7 +48,7 @@ function update_infos(data) {
         $("#restaurant-schedule").append(time + "<br/>");
     });
     $("#restaurant-status").html(create_status(data.status));
-    $("#restaurant-current-waiting-time").html(data.eta + " min");
+    $("#restaurant-current-waiting-time").text(create_eta(data.eta));
 }
 
 function update_news(events) {

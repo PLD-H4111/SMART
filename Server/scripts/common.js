@@ -11,3 +11,10 @@ function create_status(status) {
     }
 }
 
+function create_eta(eta) {
+    if(eta === "N/A") {
+        return eta;
+    }
+    return eta + " min";
+}
+
