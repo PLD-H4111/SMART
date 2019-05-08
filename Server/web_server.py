@@ -3,16 +3,17 @@
 
 
 
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
+import email.utils, datetime
 from sys import argv        # args passed when called the script
 from http import HTTPStatus
+import shutil
 import http.cookies
 
 import random
 import base64
 import os                    # curdir, sep
 
-import socketserver
 import json
 import time
 import cgi
@@ -44,29 +45,18 @@ PORT_NUMBER = 80
 
 class HTTPHandler(BaseHTTPRequestHandler):
     """HTTPHandler
-    
+
     This class is an handler for a HTTPServer, it handles GET requests
-    
+
     Attributes:
         sessions: a dictionnary which contains the users' data
     """
     sessions = {}
-    
+
     def __init__(self, request, client_address, server):
         """ constructor """
         self.actionServlet = action_servlet.ActionServlet()
         BaseHTTPRequestHandler.__init__(self, request, client_address, server)
-        
-
-    def set_headers(self, mimetype="text/html", cookies=None):
-        """ define the common headers for all the requests """
-        self.send_response(HTTPStatus.OK)
-        self.send_header('Content-type', mimetype)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        if cookies != None:
-            self.send_header('Set-Cookie', cookies.output(header=''))
-        self.end_headers()
-
 
     def do_OPTIONS(self):
         """ method: OPTIONS """
@@ -80,11 +70,21 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     def do_HEAD(self):
         """ method: HEAD """
-        self.set_headers()
+        f = self._send_headers()
+        if f != None:
+            f.close()
 
-    
     def do_GET(self):
         """ method: GET """
+        f = self._send_headers()
+
+        if f != None:
+            shutil.copyfileobj(f, self.wfile)
+            f.close()
+
+    def _send_headers(self):
+        """ define the common headers for HEAD & GET requests """
+
         mimetypes = {
             '.html': "text/html",
             '.css': "text/css",
@@ -97,23 +97,22 @@ class HTTPHandler(BaseHTTPRequestHandler):
             '.js': "application/javascript",
             '.json': "application/json"
         }
-        
+
         path = urllib.parse.urlparse(self.path).path
-        
+
         # get the cookies
         cookieHeader   = self.headers.get('Cookie')
         cookies        = http.cookies.SimpleCookie(cookieHeader)
-        
         ADMIN_PAGES = {"/admin.html", "/create_event.html", "/event_details.html"}
         AUTHENTICATION_PAGE = "login.html"
         MAIN_ADMIN_PAGE = "admin.html"
         INDEX_PAGE = "index.html"
-        
+
         user_data = self._get_user_data(cookieHeader, cookies)
-        
+
         if path == "/":
             path = INDEX_PAGE
-                    
+
         # Check file extension and set the right mime type
         sendReply = False
         mimetype = "text/html"
@@ -129,45 +128,93 @@ class HTTPHandler(BaseHTTPRequestHandler):
         if path in ADMIN_PAGES:
             if user_data == None:
                 path = AUTHENTICATION_PAGE
-        # TODO: tester avec input_data
+
         try:
             f = open(os.curdir + os.sep + path, mode='rb')
-            self.set_headers(mimetype, cookies)
-            self.wfile.write(f.read())#.encode())
-            f.close()
         except IOError:
             self.send_error(HTTPStatus.NotFound,'File Not Found: %s' % self.path)
+            return None
 
-                
-    
+        # From https://github.com/python/cpython/blob/master/Lib/http/server.py
+
+        try:
+            fs = os.fstat(f.fileno())
+            # Use browser cache if possible
+            if ("If-Modified-Since" in self.headers
+                    and "If-None-Match" not in self.headers):
+                # compare If-Modified-Since and time of last file modification
+                try:
+                    ims = email.utils.parsedate_to_datetime(
+                        self.headers["If-Modified-Since"])
+                except (TypeError, IndexError, OverflowError, ValueError):
+                    # ignore ill-formed values
+                    pass
+                else:
+                    if ims.tzinfo is None:
+                        # obsolete format with no timezone, cf.
+                        # https://tools.ietf.org/html/rfc7231#section-7.1.1.1
+                        ims = ims.replace(tzinfo=datetime.timezone.utc)
+                    if ims.tzinfo is datetime.timezone.utc:
+                        # compare to UTC datetime of last modification
+                        last_modif = datetime.datetime.fromtimestamp(
+                            fs.st_mtime, datetime.timezone.utc)
+                        # remove microseconds, like in If-Modified-Since
+                        last_modif = last_modif.replace(microsecond=0)
+
+                        if last_modif <= ims:
+                            self.send_response(HTTPStatus.NOT_MODIFIED)
+                            self.end_headers()
+                            f.close()
+                            return None
+
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-type", mimetype)
+            self.send_header("Content-Length", str(fs[6]))
+            self.send_header("Last-Modified",
+                self.date_time_string(fs.st_mtime))
+            self.end_headers()
+            return f
+        except:
+            f.close()
+            raise
+
     def do_POST(self):
         """ method: POST """
 
         print("\ndebut POST sessions", self.sessions)
-        input_data = self.rfile.read( int(self.headers['Content-Length']) ).decode()    
+        input_data = self.rfile.read( int(self.headers['Content-Length']) ).decode()
         input_data = json.loads(input_data)
         print(input_data)
-        
+
         path = urllib.parse.urlparse(self.path).path
-        
+
         # get the cookies
         cookieHeader   = self.headers.get('Cookie')
         cookies        = http.cookies.SimpleCookie(cookieHeader)
-        
+
         user_data = self._get_user_data(cookieHeader, cookies)
-        
+
         if path == "/action_servlet":
-            user_data, result = self.actionServlet.fetch(user_data, input_data)
-            
-            if user_data != None:
-                if "session-id" not in cookies:
-                    self._create_session(user_data, cookies)
+            try:
+                user_data, result = self.actionServlet.fetch(user_data, input_data)
 
-                self.sessions[int(cookies["session-id"].value)] = user_data
+                if user_data != None:
+                    if "session-id" not in cookies:
+                        self._create_session(user_data, cookies)
 
-            self.set_headers("application/javascript", cookies)
-            self.wfile.write(result.encode("utf8"))
-        
+                    self.sessions[int(cookies["session-id"].value)] = user_data
+
+                self.send_response(HTTPStatus.OK)
+                self.send_header('Content-type', "application/javascript")
+                self.send_header("Access-Control-Allow-Origin", "*")
+                if cookies != None:
+                    self.send_header('Set-Cookie', cookies.output(header=''))
+                self.end_headers()
+
+                self.wfile.write(result.encode("utf8"))
+            except Exception as ex:
+                self.send_error(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal Server Error")
+
 
     def _get_user_data(self, cookieHeader, cookies):
         """ check if user_data in cookies, else init them """
@@ -185,10 +232,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
         #sesskey = base64.b64encode( os.urandom(32) ) #.decode("utf8")
         sesskey = int( random.random()*(10**10) )     # get a sess id
         cookies["session-id"] = sesskey               # set the sess id in the cookies
-        return 
+        return
 
 
-def run(server_class=HTTPServer, handler_class=HTTPHandler, host=HOST_NAME, port=PORT_NUMBER):
+def run(server_class=ThreadingHTTPServer, handler_class=HTTPHandler, host=HOST_NAME, port=PORT_NUMBER):
     """ run the web server """
     server_address = (host, port)
     httpd = server_class(server_address, handler_class)
