@@ -53,16 +53,29 @@ def init_data():
             gen_data_ul(cap,data["begin"],data["end"],data)
     return data
     
-def get_data_from_bdd():
+def get_sensor_list_from_bdd():
     params = {}
     params["action"] = "get-sensor-list"
     sensor_list_brut = http_methods.send_data(params)
     sensor_list = json.loads(sensor_list_brut)
-    print(sensor_list)
+    capteurs = []
+    for i in range(1,len(sensor_list["capteurs"])+1):
+        for cap in sensor_list["capteurs"]:
+            if int(cap["position"]) == i:
+                if cap["type"] == "Infrarouge":
+                    capteurs.append("IR"+str(i))
+                elif cap["type"] == "Ultrason":
+                    capteurs.append("UL"+str(i))
+                break
+    return capteurs
+    
+def get_data_from_bdd():
+    
     
     params = {}
     params["action"] = "get-sensor-data"
-    params["start_date"] = datetime.datetime.now() - datetime.timedelta(days=0,seconds=30)
+    #params["start_date"] = datetime.datetime.now() - datetime.timedelta(days=0,seconds=30)
+    params["start_date"] = datetime.datetime.strptime("2019-05-07 21:30:00", '%Y-%m-%d %H:%M:%S')
     params["end_date"] = params["start_date"] + datetime.timedelta(days=0,seconds=20)
     data_brut = http_methods.send_data(params)
     data_brut = json.loads(data_brut)
@@ -84,7 +97,6 @@ def get_data_from_bdd():
             data[key][time] = donnee["measure"]
     data["begin"] = params["start_date"]
     data["end"] = params["end_date"]
-    #print(data)
     return data
 
 def lire_etat():
@@ -93,9 +105,9 @@ def lire_etat():
     fichier.close()
     return etat
     
-def init_etat(data):
+def init_etat(ordre_capteurs):
     etat = {}
-    for cap in data:
+    for cap in ordre_capteurs:
         etat[cap] = 0
     return etat
     
@@ -139,12 +151,26 @@ def lire_ordre_capteur():
     ordre_capteurs = json.loads(fichier.read())
     fichier.close()
     return ordre_capteurs
+    
+def ecrire_ordre_capteur(ordre_capteurs):
+    fichier = open("ordre_capteurs_file", "w")
+    fichier.write(json.dumps(ordre_capteurs))
+    fichier.close()
+    
+def ecrire_timestamp(timestamp):
+    fichier = open("timestamp", "w")
+    fichier.write(json.dumps(timestamp, default=str))
+    fichier.close()
 
+# A n'utiliser que lors d'un changement de capteurs :
+#ordre_capteurs = get_sensor_list_from_bdd()
+#ecrire_ordre_capteur(ordre_capteurs)
 
 ordre_capteurs = lire_ordre_capteur()
+
 data = get_data_from_bdd()
 
-etat = init_etat(data)
+etat = init_etat(ordre_capteurs)
 
 last_transition = lire_transition()
 
@@ -154,56 +180,59 @@ delta = datetime.timedelta(days=0,seconds=10)
 
 now = datetime.datetime.now()
 
-debut_inter = data["begin"] #a modifier pour le reel
-fin_inter = data["end"] #a modifier pour le reel
+debut_inter = data["begin"]
+fin_inter = data["end"]
+
+ecrire_timestamp(fin_inter)
 
 time_format = "%Y-%m-%d %H:%M:%S.%f"
 
 for cap in ordre_capteurs:
-    if cap.startswith("IR"):
-        transitions = sorted(data[cap].keys(), reverse=True)
-        nb_transitions = len(transitions)
-        if nb_transitions > 1:
-            if fin_inter - transitions[0] >= delta:
-                etat[cap] = data[cap][transitions[0]]
-                last_transition[cap] = ""
-            else:
-                for i in range(nb_transitions-1):
-                    diff = transitions[i] - transitions[i+1]
-                    if diff >= delta:
-                        etat[cap] = data[cap][transitions[i+1]]
-                        break
-                last_transition[cap] = transitions[0]
-        elif nb_transitions == 1:
-            diff = fin_inter - transitions[0]
-            if diff >= delta:
-                etat[cap] = data[cap][transitions[0]]
-                last_transition[cap] = ""
-            elif last_transition[cap] != "":
-                diff = transitions[0] - datetime.datetime.strptime(last_transition[cap],time_format)
-                if diff >= delta:
-                    if etat[cap] == 0:
-                        etat[cap] = 1
-                    else:
-                        etat[cap] = 0
-                last_transition[cap] = transitions[0]
-            else:
-                last_transition[cap] = transitions[0]
-        else:
-            if last_transition[cap] != "":
-                diff = fin_inter - datetime.datetime.strptime(last_transition[cap],time_format)
-                if diff >= delta:
-                    if etat[cap] == 0:
-                        etat[cap] = 1
-                    else:
-                        etat[cap] = 0
+    if cap in data:
+        if cap.startswith("IR"):
+            transitions = sorted(data[cap].keys(), reverse=True)
+            nb_transitions = len(transitions)
+            if nb_transitions > 1:
+                if fin_inter - transitions[0] >= delta:
+                    etat[cap] = data[cap][transitions[0]]
                     last_transition[cap] = ""
-    elif cap.startswith("UL"):
-        somme = 0
-        for time in data[cap].keys():
-            somme = somme + data[cap][time]
-        avg = somme/len(data[cap].keys())
-        etat[cap] = (distances_max[cap] - avg)/distances_max[cap]
+                else:
+                    for i in range(nb_transitions-1):
+                        diff = transitions[i] - transitions[i+1]
+                        if diff >= delta:
+                            etat[cap] = data[cap][transitions[i+1]]
+                            break
+                    last_transition[cap] = transitions[0]
+            elif nb_transitions == 1:
+                diff = fin_inter - transitions[0]
+                if diff >= delta:
+                    etat[cap] = data[cap][transitions[0]]
+                    last_transition[cap] = ""
+                elif last_transition[cap] != "":
+                    diff = transitions[0] - datetime.datetime.strptime(last_transition[cap],time_format)
+                    if diff >= delta:
+                        if etat[cap] == 0:
+                            etat[cap] = 1
+                        else:
+                            etat[cap] = 0
+                    last_transition[cap] = transitions[0]
+                else:
+                    last_transition[cap] = transitions[0]
+            else:
+                if last_transition[cap] != "":
+                    diff = fin_inter - datetime.datetime.strptime(last_transition[cap],time_format)
+                    if diff >= delta:
+                        if etat[cap] == 0:
+                            etat[cap] = 1
+                        else:
+                            etat[cap] = 0
+                        last_transition[cap] = ""
+        elif cap.startswith("UL"):
+            somme = 0
+            for time in data[cap].keys():
+                somme = somme + int(data[cap][time])
+            avg = somme/len(data[cap].keys())
+            etat[cap] = (distances_max[cap] - avg)/distances_max[cap]
 
 ecrire_etat(etat)
 ecrire_transition(last_transition)
