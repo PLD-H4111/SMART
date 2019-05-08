@@ -3,8 +3,8 @@
 
 
 
-from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
-import email.utils, datetime
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import socketserver, email.utils, datetime
 from sys import argv        # args passed when called the script
 from http import HTTPStatus
 import shutil
@@ -25,6 +25,9 @@ sys.path.insert(0, './servlets/')
 reload(sys)
 import action_servlet
 
+# For Python < 3.7 (instead of from http.server import ThreadingHTTPServer)
+class ThreadingHTTPServer(socketserver.ThreadingMixIn, HTTPServer):
+    daemon_threads = True
 
 
 HOST_NAME   = '0.0.0.0' #'127.0.0.1'
