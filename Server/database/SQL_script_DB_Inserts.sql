@@ -62,3 +62,9 @@ INSERT INTO `RestaurantAvailabilities` (`PK_idRestaurantAvailabilities`, `date`,
 -- -----------------------------------------------------
 INSERT INTO `Admin` (`PK_idAdmin`, `login`, `password`) VALUES 
     (DEFAULT, "admin", "admin");
+
+
+
+INSERT INTO `WaitingTime` (`PK_idWaitingTime`, `waitingTime`, `date`, `FK_restaurant`) VALUES 
+    (DEFAULT, 453, '2019-05-08 23:50:00', 1);
+    
