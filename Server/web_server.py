@@ -130,7 +130,10 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
         if path in ADMIN_PAGES:
             if user_data == None:
-                path = AUTHENTICATION_PAGE
+                self.send_response(HTTPStatus.FOUND)
+                self.send_header("Location", AUTHENTICATION_PAGE)
+                self.end_headers()
+                return None
 
         try:
             f = open(os.curdir + os.sep + path, mode='rb')
