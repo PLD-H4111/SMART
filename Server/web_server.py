@@ -166,6 +166,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
                         if last_modif <= ims:
                             self.send_response(HTTPStatus.NOT_MODIFIED)
+                            if cookies != None:
+                                self.send_header('Set-Cookie', cookies.output(header=''))
                             self.end_headers()
                             f.close()
                             return None
