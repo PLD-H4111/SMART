@@ -24,7 +24,7 @@ $(document).ready(function() {
                     "<tr>"
                     + "<td>"
                     +   "<input type='checkbox' id='check" + restaurants[i].id + "' onchange='checkbox_handler();' checked/>"
-                    +   "<a href='restaurant.html?id=" + restaurants[i].id + "'>" + restaurants[i].name + "</a>"
+                    +   "<label for='check" + restaurants[i].id + "'><a href='restaurant.html?id=" + restaurants[i].id + "'>" + restaurants[i].name + "</a></label>"
                     + "</td>"
                     + "<td>" + create_status(restaurants[i].status) + "</td>"
                     + "<td>" + create_eta(restaurants[i].eta) + "</td>"
