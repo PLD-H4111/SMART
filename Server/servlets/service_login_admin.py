@@ -2,11 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-from importlib import reload
-import sys
-sys.path.insert(0, './database/')
-reload(sys)
-
 import json
 import dao
 

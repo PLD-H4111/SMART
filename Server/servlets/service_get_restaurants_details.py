@@ -2,11 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-from importlib import reload
-import sys
-sys.path.insert(0, './database/')
-reload(sys)
-
 from datetime import date, datetime, timedelta
 import json
 import dao
@@ -27,13 +22,13 @@ def get_restaurants_details(restaurants_ids, date_time):
             json_result += ", "
     json_result += """ ] } """
     return json_result
-    
+
 
 
 def get_restaurant_details(restaurant_id, date):
     """ get the details of a single restaurant """
     restaurant = dao.select_restaurant(restaurant_id)
-    
+
     if restaurant != None:
         id = restaurant[0]
         name = restaurant[1]
@@ -42,16 +37,16 @@ def get_restaurant_details(restaurant_id, date):
         schedule = []
         waitingTime = ""
         data = []
-        
+
         waiting_time_tuple = dao.select_last_waiting_time(id)
         waitingTime = extract_waiting_time(waiting_time_tuple)
-        
+
         availability_tuple = dao.select_actual_restaurant_availability(id)
         if availability_tuple != None:
             availability = 1
         else:
             availability = 0
-        
+
         availabilities_tuples = dao.select_restaurant_availabilities(restaurant_id, date)
         if availabilities_tuples != None:
             for tuple in availabilities_tuples:
@@ -61,18 +56,17 @@ def get_restaurant_details(restaurant_id, date):
                                              str(tuple[3].seconds%60).zfill(2)))
         else:
             pass
-        
+
         waiting_time_tuples = dao.select_waiting_times(restaurant_id, date)
         if waiting_time_tuples != None:
             for tuple in waiting_time_tuples:
-                print("data68", data)
                 data.append({"date": tuple[2].strftime("%H:%M:%S"),
                              "realtime": tuple[1]})
         else:
             pass
-        
+
         schedule = '["' + '", "'.join(schedule) + '"]'
-        
+
         json_result = '''{{
             "id": {},
             "name": "{}",
@@ -91,8 +85,8 @@ def get_restaurant_details(restaurant_id, date):
         return json_error
 
 
-    
-    
+
+
 def extract_waiting_time(waiting_time_tuple):
     """ extract waiting time from a tuple of the WaitingTime table """
     waitingTime = ""
@@ -111,5 +105,5 @@ def extract_waiting_time(waiting_time_tuple):
     else:
         waitingTime = "N/A"
     return waitingTime
-    
-    
+
+

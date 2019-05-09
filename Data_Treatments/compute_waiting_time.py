@@ -17,16 +17,16 @@ def send_waiting_time(waiting_time,timsetamp,restaurant):
 
 person_counts = { #per restaurant per position
     "8": {
-        "1": 5,
-        "2": 10,
-        "3": 15,
-        "4": 30
+        "1": 10,
+        "2": 25,
+        "3": 25,
+        "4": 40
     }
 }
 
 speed = 8 #persons per min
 
-interval = 20 #sec
+interval = 10 #sec
 
 if __name__ == "__main__":
     persons = {}

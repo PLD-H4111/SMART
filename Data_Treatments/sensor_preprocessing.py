@@ -7,7 +7,7 @@ import json
 import http_methods
 
 distances_max = {"8": {"4": 800}}
-IR_delta = datetime.timedelta(days=0,seconds=10)
+IR_delta = datetime.timedelta(days=0,seconds=5)
 
 def get_sensors_per_restaurant_from_database():
     params = {"action": "get-sensor-list"}
@@ -41,7 +41,7 @@ def get_sensors_state_per_restaurant():
     sensors_per_restaurant = get_sensors_per_restaurant_from_database()
 
     start_date = datetime.datetime.now() - datetime.timedelta(days=0,seconds=30)
-    end_date = start_date + datetime.timedelta(days=0,seconds=20)
+    end_date = start_date + datetime.timedelta(days=0,seconds=25)
 
     data = get_data_from_database(start_date, end_date)
     sensor_last_real_states = get_last_state_from_database(start_date)
@@ -89,4 +89,5 @@ def get_sensors_state_per_restaurant():
                         if restaurant_id in sensor_last_real_states and position in sensor_last_real_states[restaurant_id]:
                             sensor_states[restaurant_id][sensor_type][position] = sensor_last_real_states[restaurant_id][position]["value"]
 
+    print(sensor_states)
     return sensor_states

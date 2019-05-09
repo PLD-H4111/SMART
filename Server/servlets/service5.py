@@ -1,23 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from importlib import reload
-import sys
-sys.path.insert(0, './database/')
-reload(sys)
-
 import json
 import dao
-
-
 
 def get_restaurant_events(database, restaurant_id, date):
     """ """
     request = "select name, eventDescription, beginningDate, endingDate from Event where FK_Restaurant = " + restaurant_id
-    mycursor = database.cursor()    
+    mycursor = database.cursor()
     mycursor.execute(request)
     result = mycursor.fetchall()
-    
+
     if result != None:
         json_result = """{ "events": ["""
         for index in range(len(result)):
@@ -36,17 +29,17 @@ def get_restaurant_events(database, restaurant_id, date):
         json_result = '''{
             "error": "Events for this restaurant doesn't exist in the database."
         }'''
-        
+
     return json_result;
 
 
-    
-    
+
+
 
 def get_all_restaurants_events():
     """ """
     result = dao.select_restaurants_events()
-    
+
     if result != None:
         json_result = """{ "events": ["""
         for index in range(len(result)):
@@ -91,16 +84,16 @@ def get_event_details(event_id):
         }'''
     return json_result;
 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
 def get_restaurant_event0s(restaurant_id, date):
     """ """
     result = dao.select_restaurant_events(restaurant_id, date)
-    
+
     if result != None:
         json_result = """{ "events": ["""
         for index in range(len(result)):
@@ -119,5 +112,5 @@ def get_restaurant_event0s(restaurant_id, date):
         json_result = '''{
             "error": "Events for this restaurant doesn't exist in the database."
         }'''
-        
+
     return json_result;
