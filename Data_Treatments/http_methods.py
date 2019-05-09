@@ -1,32 +1,22 @@
 #!/bin/python3
 
-
-from collections import OrderedDict
 import requests
 import json
 
-
-
-
-
-def get_data():
-	data_source_url = "https://candidate.hubteam.com/candidateTest/v3/problem/dataset"
-	PARAMS = {'userKey': "0"}
-	r = requests.get(url = data_source_url, params = PARAMS)
-	data = r.json()
-	return data
-
-
+server_ip = "192.168.0.103"
+server_port = 8080
+server_url = "http://%s:%s/action_servlet" % (server_ip, server_port)
 
 def send_data(result):
-	destination_url = "http://127.0.0.1:8080/action_servlet"
-	PARAMS = {'userKey': "0"}
-	result = json.dumps(result, sort_keys=False, indent=4, default=str)
-	r = requests.post(url = destination_url, headers={"content-type": "application/json;charset=utf-8"}, data = result, params=PARAMS) 
-	pastebin_url = r.text
-	return pastebin_url
-	#print("The pastebin URL is:%s"%pastebin_url) 
+    try:
+        json_data = json.dumps(result, sort_keys=False, default=str)
 
+        response = requests.post(url=server_url, headers={"Content-type": "application/json"}, data=json_data, timeout=5)
 
+        if response.status_code != 200:
+            print("Error while sending data. Status code :", response.status_code, "/ Response :", response.text)
 
-#send_data("1, 2, 3, viva l'Algérie !")
+        return response.text
+    except Exception as ex:
+        print("Error while sending data :", ex)
+        return None
