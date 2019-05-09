@@ -1,6 +1,6 @@
 # SMART - Oblivion
 
-Projet de traitement et de prévision de l’affluence dans les restaurants INSA
+Projet de traitement et de prévision de l’affluence dans les restaurants INSA.
 
 Contributeurs :
 

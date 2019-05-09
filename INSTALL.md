@@ -1,6 +1,6 @@
 # Installation du projet
 
-## Serveur Mysql
+## Serveur MySQL
 
 ### Configuration
 
