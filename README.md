@@ -12,3 +12,6 @@ Contributeurs :
 - Mathieu Le Ral
 - Alexis Bosio
 - Jorge Terreu Serrano
+
+Vidéo de promotion :
+https://youtu.be/2DZTVuepB8w
