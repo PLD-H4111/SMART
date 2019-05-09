@@ -36,9 +36,9 @@ def get_restaurant_events(database, restaurant_id, date):
 
 
 
-def get_all_restaurants_events():
+def get_all_restaurants_events(database):
     """ """
-    result = dao.select_restaurants_events()
+    result = dao.select_restaurants_events(database)
 
     if result != None:
         json_result = """{ "events": ["""
@@ -63,9 +63,9 @@ def get_all_restaurants_events():
     return json_result;
 
 
-def get_event_details(event_id):
+def get_event_details(database, event_id):
     """ """
-    result = dao.select_event_details(event_id)
+    result = dao.select_event_details(database, event_id)
 
     json_result = ""
     if result != None:

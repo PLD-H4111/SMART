@@ -53,7 +53,7 @@ class ActionServlet:
             return user_data, json_error
         else:
             if input_data["action"] == "get-restaurants-list":
-                return user_data, get_restaurants()
+                return user_data, get_restaurants(self.mydb)
 
 
             elif input_data["action"] == "get-restaurant-details":
@@ -68,7 +68,7 @@ class ActionServlet:
                     }'''
                     return user_data, json_error
                 else:
-                    return user_data, get_restaurants_details(input_data["restaurants"], input_data["date"])
+                    return user_data, get_restaurants_details(self.mydb, input_data["restaurants"], input_data["date"])
 
 
             elif input_data["action"] == "admin-login":
@@ -83,11 +83,12 @@ class ActionServlet:
                     }'''
                     return user_data, json_error
                 else:
-                    return login_admin(user_data, input_data["login"], input_data["password"])
+                    return login_admin(self.mydb, user_data, input_data["login"], input_data["password"])
 
 
             elif input_data["action"] == "create-restaurants-events":
-                return user_data, create_restaurants_event(input_data["title"],
+                return user_data, create_restaurants_event(self.mydb, 
+                                                           input_data["title"],
                                                            input_data["content"],
                                                            input_data["start"],
                                                            input_data["end"],
@@ -99,11 +100,11 @@ class ActionServlet:
 
 
             elif input_data["action"] == "get-all-restaurants-events":
-                return user_data, service5.get_all_restaurants_events()
+                return user_data, service5.get_all_restaurants_events(self.mydb)
 
 
             elif input_data["action"] == "get-event-details":
-                return user_data, service5.get_event_details(input_data["event"])
+                return user_data, service5.get_event_details(self.mydb, input_data["event"])
 
 
             elif input_data["action"] == "sensor-upload":

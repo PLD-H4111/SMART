@@ -7,9 +7,9 @@ import dao
 
 
 
-def login_admin(user_data, username, passwd):
+def login_admin(database, user_data, username, passwd):
     """ """
-    admin = dao.select_admin(username, passwd)
+    admin = dao.select_admin(database, username, passwd)
     json_result = ""
     if admin != None:
         user_data = {

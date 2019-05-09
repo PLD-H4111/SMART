@@ -12,12 +12,12 @@ import dao
 
 
 
-def get_restaurants_details(restaurants_ids, date_time):
+def get_restaurants_details(database, restaurants_ids, date_time):
     """ get the details of all the restaurants """
     date = date_time[:10]
     json_result = """{ "restaurants": ["""
     for i, restaurant_id in enumerate(restaurants_ids):
-        json_result += get_restaurant_details(restaurant_id, date)
+        json_result += get_restaurant_details(database, restaurant_id, date)
         if i != len(restaurants_ids)-1:
             json_result += ", "
     json_result += """ ] } """
@@ -25,9 +25,9 @@ def get_restaurants_details(restaurants_ids, date_time):
 
 
 
-def get_restaurant_details(restaurant_id, date):
+def get_restaurant_details(database, restaurant_id, date):
     """ get the details of a single restaurant """
-    restaurant = dao.select_restaurant(restaurant_id)
+    restaurant = dao.select_restaurant(database, restaurant_id)
 
     if restaurant != None:
         id = restaurant[0]
@@ -38,16 +38,16 @@ def get_restaurant_details(restaurant_id, date):
         waitingTime = ""
         data = []
 
-        waiting_time_tuple = dao.select_last_waiting_time(id)
+        waiting_time_tuple = dao.select_last_waiting_time(database, id)
         waitingTime = extract_waiting_time(waiting_time_tuple)
 
-        availability_tuple = dao.select_actual_restaurant_availability(id)
+        availability_tuple = dao.select_actual_restaurant_availability(database, id)
         if availability_tuple != None:
             availability = 1
         else:
             availability = 0
 
-        availabilities_tuples = dao.select_restaurant_availabilities(restaurant_id, date)
+        availabilities_tuples = dao.select_restaurant_availabilities(database, restaurant_id, date)
         if availabilities_tuples != None:
             for tuple in availabilities_tuples:
                 schedule.append("{}h{}-{}h{}".format(str(tuple[2].seconds//3600).zfill(2),
@@ -57,7 +57,7 @@ def get_restaurant_details(restaurant_id, date):
         else:
             pass
 
-        waiting_time_tuples = dao.select_waiting_times(restaurant_id, date)
+        waiting_time_tuples = dao.select_waiting_times(database, restaurant_id, date)
         if waiting_time_tuples != None:
             for tuple in waiting_time_tuples:
                 data.append({"date": tuple[2].strftime("%H:%M:%S"),

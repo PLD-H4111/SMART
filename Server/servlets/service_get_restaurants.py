@@ -19,14 +19,14 @@ import dao
     }'''
 
 
-def get_restaurants():
+def get_restaurants(database):
     """ """
     json_result = """{"restaurants": ["""
 
     today_date = date.today().strftime("%Y-%m-%d")
     now = datetime.now()
 
-    restaurants = dao.select_all_restaurants()
+    restaurants = dao.select_all_restaurants(database)
     for i, restaurant in enumerate(restaurants):
         id = restaurant[0]
         name = restaurant[1]
@@ -34,10 +34,10 @@ def get_restaurants():
         waitingTime = ""
         availability = ""
 
-        waiting_time_tuple = dao.select_last_waiting_time(id)
+        waiting_time_tuple = dao.select_last_waiting_time(database, id)
         waitingTime = extract_waiting_time(waiting_time_tuple)
 
-        availability_tuple = dao.select_actual_restaurant_availability(id)
+        availability_tuple = dao.select_actual_restaurant_availability(database, id)
         if availability_tuple != None:
             availability = 1
         else:
