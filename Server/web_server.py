@@ -36,13 +36,12 @@ PORT_NUMBER = 80
 
 
 
-# TODO: fix login enter key
-# TODO: fix redirection in login
 # TODO: fix sessions with posts
 # TODO: error403 must send 403 code
-# TODO: créer une session seulement si on en a besoin
 # TODO: gérer la deconnexion et mieux gérer les cas limites de reconnexion
-
+# TODO: verifier l'authentification pour les services sensibles
+# TODO: injection SQL
+# i.e user_data == None
 
 
 
@@ -50,7 +49,8 @@ PORT_NUMBER = 80
 class HTTPHandler(BaseHTTPRequestHandler):
     """HTTPHandler
 
-    This class is an handler for a HTTPServer, it handles GET requests
+    This class handles HTTP requests GET, POST, HEAD, OPTIONS
+    It manages cookies, sessions, cache and authentication for admin pages
 
     Attributes:
         sessions: a dictionnary which contains the users' data
