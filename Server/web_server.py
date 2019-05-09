@@ -246,7 +246,7 @@ class HTTPHandler(BaseHTTPRequestHandler):
         return
 
 
-def run(server_class=HTTPServer, handler_class=HTTPHandler, host=HOST_NAME, port=PORT_NUMBER):
+def run(server_class=ThreadingHTTPServer, handler_class=HTTPHandler, host=HOST_NAME, port=PORT_NUMBER):
     """ run the web server """
     server_address = (host, port)
     httpd = server_class(server_address, handler_class)

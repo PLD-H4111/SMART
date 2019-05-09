@@ -1,7 +1,4 @@
 
-USE `sql7291089`;
-
-
 DROP TABLE IF EXISTS `Event` ;
 DROP TABLE IF EXISTS `RestaurantAvailabilities` ;
 DROP TABLE IF EXISTS `WaitingTime` ;

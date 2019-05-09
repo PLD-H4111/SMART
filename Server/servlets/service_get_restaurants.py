@@ -58,11 +58,8 @@ def extract_waiting_time(waiting_time_tuple):
     """ extract waiting time from a tuple of the WaitingTime table """
     waitingTime = ""
     if waiting_time_tuple != None:
-        #print("WTT 196", waiting_time_tuple)
-        #print(waiting_time_tuple[2])
         a = waiting_time_tuple[2]
         b = datetime.now()
-        #b = datetime(2019,5,2,12,10)
         c = b - a
         delta = timedelta(0, 600, 0) # 10 minutes
         if b >= a and c < delta:

@@ -37,6 +37,7 @@ if __name__ == "__main__":
             sensors_state_per_restaurant = sensor_preprocessing.get_sensors_state_per_restaurant()
         except Exception as ex:
             print(ex)
+            time.sleep(1)
             continue
 
         for restaurant_id, restaurant in sensors_state_per_restaurant.items():
